@@ -12,12 +12,14 @@ public class LoggingConfig {
     @Bean
     @Scope("prototype")
     public Logger logger(final InjectionPoint injectionPoint) {
-        if (injectionPoint.getMethodParameter() != null) {
-            return LoggerFactory.getLogger(injectionPoint.getMethodParameter().getContainingClass());
-        }
+        if (injectionPoint != null) {
+            if (injectionPoint.getMethodParameter() != null) {
+                return LoggerFactory.getLogger(injectionPoint.getMethodParameter().getContainingClass());
+            }
 
-        if (injectionPoint.getField() != null) {
-            return LoggerFactory.getLogger(injectionPoint.getField().getDeclaringClass());
+            if (injectionPoint.getField() != null) {
+                return LoggerFactory.getLogger(injectionPoint.getField().getDeclaringClass());
+            }
         }
         throw new IllegalArgumentException();
     }
