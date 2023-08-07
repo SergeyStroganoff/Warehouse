@@ -16,7 +16,7 @@ import lombok.*;
 public class User {
 
     @Id
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "username", nullable = false)
     private String userName;
     private String password;
     private boolean enabled;

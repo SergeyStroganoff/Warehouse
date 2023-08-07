@@ -26,7 +26,7 @@ public class Transaction {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "user_name")
+    @JoinColumn(name = "username")
     private User user;
 
     private TransactionType transactionType;
