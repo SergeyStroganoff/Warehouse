@@ -1,24 +1,21 @@
 package com.stroganov.warehouse.domain.model.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-@Table
+@Table(name = "authorities")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-/*
-This class is from previous lesson;
- */
-public class Authorities {
+
+public class Authorities implements GrantedAuthority {
     @Id
-    @Column(name = "username", nullable = false)
-    private String userName;
+    @Column(name = "authority_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String authority;
 }
