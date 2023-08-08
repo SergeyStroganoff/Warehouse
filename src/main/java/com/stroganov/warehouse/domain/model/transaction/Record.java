@@ -1,12 +1,9 @@
 package com.stroganov.warehouse.domain.model.transaction;
 
-import com.stroganov.warehouse.domain.model.user.User;
+import com.stroganov.warehouse.domain.model.item.Item;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table
@@ -15,19 +12,21 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class Transaction {
+public class Record {
     @Id
-    @Column(name = "transaction_id", nullable = false)
+    @Column(name = "record_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    private int amount;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "username")
-    private User user;
-
-    private TransactionType transactionType;
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
 }

@@ -1,11 +1,10 @@
 package com.stroganov.warehouse.domain.model.user;
 
+import com.stroganov.warehouse.domain.model.warehouse.Warehouse;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Indexed;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -37,6 +36,17 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "authority_id"),
             inverseJoinColumns = @JoinColumn(name = "username"))
     private Set<Authorities> authorities = new HashSet<>();
+
+
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinTable(
+            name = "user_warehouse",
+            joinColumns = @JoinColumn(name = "warehouse_id"),
+            inverseJoinColumns = @JoinColumn(name = "username"))
+    @Transient
+    private List<Warehouse> warehouseList;
 
     @Override
     public Collection<Authorities> getAuthorities() {
