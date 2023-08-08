@@ -27,6 +27,7 @@ public class User implements UserDetails {
     private String password;
     @org.hibernate.annotations.Index(name = "fullName")
     private String fullName;
+    private String email;
     private boolean enabled;
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})

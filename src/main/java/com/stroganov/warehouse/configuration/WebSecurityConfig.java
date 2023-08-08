@@ -25,11 +25,13 @@ public class WebSecurityConfig {
     @Autowired
     DataSource dataSource;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    UserDetailsService userDetailsService;
 
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+
+/*
     @Bean
     public UserDetailsService userDetailsService() {
         //  UserDetails user1 = User.withUsername("user1")
@@ -48,12 +50,14 @@ public class WebSecurityConfig {
         return new JdbcUserDetailsManager(dataSource);
     }
 
+ */
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/hello").hasRole("HR")
+                        .requestMatchers("/hello").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -70,7 +74,7 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(HttpSecurity http, UserDetailsService userDetailService) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailService)
-                .passwordEncoder(passwordEncoder())
+                .passwordEncoder(passwordEncoder)
                 .and()
                 .build();
     }
@@ -99,7 +103,4 @@ public class WebSecurityConfig {
      .deleteCookies("JSESSIONID")
      .logoutSuccessHandler(logoutSuccessHandler());
     */
-
-
-
 }
