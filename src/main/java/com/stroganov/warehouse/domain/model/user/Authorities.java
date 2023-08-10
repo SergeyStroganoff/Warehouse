@@ -10,12 +10,12 @@ import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+//@ToString
 
 public class Authorities implements GrantedAuthority {
     @Id
-    @Column(name = "authority_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+   // @Column(name = "authority_id")
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+  //  private int id;
     private String authority;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+//@ToString
 public class Warehouse implements Serializable {
     @Id
     @Column(name = "warehouse_id", nullable = false)
@@ -32,7 +32,7 @@ public class Warehouse implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(
             name = "user_warehouse",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "warehouse_id"))
+            joinColumns = @JoinColumn(name = "warehouse_id"),
+            inverseJoinColumns = @JoinColumn(name = "username"))
     private List<User> userList;
 }

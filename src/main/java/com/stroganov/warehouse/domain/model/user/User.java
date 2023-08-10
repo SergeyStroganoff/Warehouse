@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+//@ToString
 public class User implements UserDetails {
 
     @Id
@@ -33,8 +33,8 @@ public class User implements UserDetails {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(
             name = "user_authority",
-            joinColumns = @JoinColumn(name = "authority_id"),
-            inverseJoinColumns = @JoinColumn(name = "username"))
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authorities> authorities = new HashSet<>();
 
 
@@ -43,9 +43,8 @@ public class User implements UserDetails {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(
             name = "user_warehouse",
-            joinColumns = @JoinColumn(name = "warehouse_id"),
-            inverseJoinColumns = @JoinColumn(name = "username"))
-    @Transient
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "warehouse_id"))
     private List<Warehouse> warehouseList;
 
     @Override

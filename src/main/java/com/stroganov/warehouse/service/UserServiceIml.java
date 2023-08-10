@@ -48,11 +48,9 @@ public class UserServiceIml implements UserService, UserDetailsService {
         return userRepository.findUserByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userName + " not found !"));
     }
-
-
     @Transactional
     public UserDTO save(UserDTO userDTO) throws RepositoryTransactionException {
-        if (userRepository.findUserByUserName(userDTO.userName()).isPresent()) {
+        if (userRepository.findUserByUserName(userDTO.getUserName()).isPresent()) {
             throw new ValidationException("User with the same name exists!");
         }
         User user = modelMapper.map(userDTO, User.class);
@@ -71,29 +69,38 @@ public class UserServiceIml implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void update(UserDTO userDTO) throws RepositoryTransactionException {
-        if (userRepository.findUserByUserName(userDTO.userName()).isEmpty()) {
-            throw new UsernameNotFoundException("User with the  name: " + userDTO.userName() + " was not found");
+        if (userRepository.findUserByUserName(userDTO.getUserName()).isEmpty()) {
+            throw new UsernameNotFoundException("User with the  name: " + userDTO.getUserName() + " was not found");
         }
-        String encodedPassword = passwordEncoder.encode(userDTO.password());
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         try {
-            userRepository.update(encodedPassword, userDTO.fullName(), userDTO.email(), userDTO.enabled(), userDTO.authorities(), userDTO.userName());
+            userRepository.update(encodedPassword, userDTO.getFullName(), userDTO.getEmail(), userDTO.isEnabled(), userDTO.getAuthorities(), userDTO.getUserName());
         } catch (Exception e) {
-            logger.error("Error updating user with user name: " + userDTO.userName(), e);
-            throw new RepositoryTransactionException("Error updating user with user name: " + userDTO.userName(), e);
+            logger.error("Error updating user with user name: " + userDTO.getUserName(), e);
+            throw new RepositoryTransactionException("Error updating user with user name: " + userDTO.getUserName(), e);
         }
     }
-
 
     @Transactional
 
     public void delete(String userName) throws RepositoryTransactionException {
-        User user =userRepository.findUserByUserName(userName)
+        User user = userRepository.findUserByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userName + " not found !"));
         try {
             userRepository.delete(user);
         } catch (Exception e) {
-            logger.error("Error saving user with user name: " + userName, e);
+            logger.error("Error deleting user with user name: " + userName, e);
             throw new RepositoryTransactionException("Error deleting user with user name: " + user.getUsername(), e);
         }
+    }
+
+    @Override
+    public Optional<UserDTO> findUserByName(String userName) {
+        Optional<User> userOptional = userRepository.findUserByUserName(userName);
+        if (userOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        UserDTO userDTO = modelMapper.map(userOptional.get(), UserDTO.class);
+        return Optional.of(userDTO);
     }
 }
