@@ -53,14 +53,17 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/hello").hasRole("USER")
+                        .requestMatchers("/main").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll())
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/hello")
+                        .permitAll())
                 .exceptionHandling(e->e.accessDeniedPage("/deniedpage"));
 
         return http.build();

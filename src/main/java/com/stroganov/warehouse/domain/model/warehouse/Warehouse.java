@@ -27,12 +27,13 @@ public class Warehouse implements Serializable {
     @Column
     private String address;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinTable(
-            name = "user_warehouse",
-            joinColumns = @JoinColumn(name = "warehouse_id"),
-            inverseJoinColumns = @JoinColumn(name = "username"))
+ // @ManyToMany(fetch = FetchType.EAGER,
+ //         cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+ // @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+ // @JoinTable(
+ //         name = "user_warehouse",
+ //         joinColumns = @JoinColumn(name = "warehouse_id"),
+ //         inverseJoinColumns = @JoinColumn(name = "username"))
+ @ManyToMany(mappedBy = "warehouseList")
     private List<User> userList;
 }

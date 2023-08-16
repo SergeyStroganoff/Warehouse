@@ -47,3 +47,4 @@ build/
 *.xlsx
 *.png
 *.properties
+/develop-doc
