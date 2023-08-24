@@ -1,13 +1,13 @@
 package com.stroganov.warehouse.configuration;
 
 
+import com.stroganov.warehouse.domain.model.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,8 +32,8 @@ public class WebSecurityConfig  {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/home","/registration","/images/**").permitAll()
-                        .requestMatchers("/main").hasRole("USER")
+                        .requestMatchers("/", "/hello", "/registration", "/images/**", "/registration-action").permitAll()
+                        .requestMatchers("/main").hasAnyRole(Role.ROLE_USER.getValue(),Role.ROLE_ADMIN.getValue(),Role.ROLE_ACCOUNTANT.getValue(),Role.ROLE_WAREHOUSE.getValue())
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

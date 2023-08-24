@@ -1,7 +1,10 @@
 package com.stroganov.warehouse.domain.dto.user;
 
+import com.stroganov.warehouse.domain.dto.warehouse.WarehouseDTO;
 import com.stroganov.warehouse.domain.model.user.Authorities;
-import com.stroganov.warehouse.domain.model.warehouse.Warehouse;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,24 +20,30 @@ import java.util.Set;
 @Setter
 @ToString
 public class UserDTO {
-
+    @Size(min = 4, max = 12, message = "Name (login) must be from 4 to 12 symbols")
     private String userName;
+    @Size(min = 4, max = 12, message = "Password must be from 4 to 12 symbols")
     private String password;
+
+    @NotBlank(message = "Full name can not be blank")
     private String fullName;
+
+    @Email(message = "please text correct email")
     private String email;
     private boolean enabled;
     private Set<Authorities> authorities = new HashSet<>();
-    private List<Warehouse> warehouseList = new ArrayList<>();
+    @ToString.Exclude
+    private List<WarehouseDTO> warehouseDTOList = new ArrayList<>();
 
     public UserDTO(String userName, String password, String fullName, String email, boolean enabled
-            , List<Warehouse> warehouseList, Set<Authorities> authorities) {
+            , List<WarehouseDTO> warehouseList, Set<Authorities> authorities) {
         this.userName = userName;
         this.password = password;
         this.fullName = fullName;
         this.email = email;
         this.enabled = enabled;
         this.authorities.addAll(authorities);
-        this.warehouseList.addAll(warehouseList);
+        this.warehouseDTOList.addAll(warehouseList);
     }
 
     public UserDTO(String userName, String password, String fullName, String email, boolean enabled) {

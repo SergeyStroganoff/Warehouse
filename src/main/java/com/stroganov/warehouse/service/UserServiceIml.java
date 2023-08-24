@@ -21,11 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @PackagePrivate
 public class UserServiceIml implements UserService, UserDetailsService {
 
+    public static final String ERROR_DELETING_USER_WITH_USER_NAME = "Error deleting user with user name: ";
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
@@ -40,9 +41,9 @@ public class UserServiceIml implements UserService, UserDetailsService {
 
 
     @Override
-    @Transactional
-    /*
-    User DetailService method
+    @Transactional(readOnly = true)
+    /**
+     User DetailService method
      */
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         return userRepository.findUserByUserName(userName)
@@ -82,19 +83,19 @@ public class UserServiceIml implements UserService, UserDetailsService {
     }
 
     @Transactional
-
     public void delete(String userName) throws RepositoryTransactionException {
         User user = userRepository.findUserByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userName + " not found !"));
         try {
             userRepository.delete(user);
         } catch (Exception e) {
-            logger.error("Error deleting user with user name: " + userName, e);
-            throw new RepositoryTransactionException("Error deleting user with user name: " + user.getUsername(), e);
+            logger.error(ERROR_DELETING_USER_WITH_USER_NAME + userName, e);
+            throw new RepositoryTransactionException(ERROR_DELETING_USER_WITH_USER_NAME + user.getUsername(), e);
         }
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UserDTO> findUserByName(String userName) {
         Optional<User> userOptional = userRepository.findUserByUserName(userName);
         if (userOptional.isEmpty()) {
