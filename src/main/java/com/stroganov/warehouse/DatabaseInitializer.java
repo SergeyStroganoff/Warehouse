@@ -37,9 +37,7 @@ public class DatabaseInitializer implements ApplicationListener<ApplicationReady
             UserDTO userDTO = new UserDTO("test", "test", "user for test", "test@test.com", true);
             userDTO.getAuthorities().add(authorities);
             userDTO.getWarehouseDTOList().add(warehouse);
-            User user = modelMapper.map(userDTO, User.class);
-            //userList.add(user);
-            if (userService.findUserByName(user.getUsername()).isEmpty()) {
+            if (userService.findUserByName(userDTO.getUserName()).isEmpty()) {
                 try {
                     userService.save(userDTO);
                 } catch (RepositoryTransactionException e) {

@@ -6,7 +6,7 @@ import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import java.util.Optional;
 
 public interface UserService {
-    UserDTO save(UserDTO userDTO) throws RepositoryTransactionException;
+    String save(UserDTO userDTO) throws RepositoryTransactionException;
 
     void update(UserDTO userDTO) throws RepositoryTransactionException;
 

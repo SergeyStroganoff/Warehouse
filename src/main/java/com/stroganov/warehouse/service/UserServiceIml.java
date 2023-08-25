@@ -6,6 +6,7 @@ import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import com.stroganov.warehouse.repository.UserRepository;
 import jakarta.validation.ValidationException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.PackagePrivate;
 import org.modelmapper.ModelMapper;
@@ -22,22 +23,22 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @PackagePrivate
 public class UserServiceIml implements UserService, UserDetailsService {
 
     public static final String ERROR_DELETING_USER_WITH_USER_NAME = "Error deleting user with user name: ";
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+   // @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    UserRepository userRepository;
+  //  @Autowired
+    private UserRepository userRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
+  //  @Autowired
+    private ModelMapper modelMapper;
 
-    @Autowired
-    public Logger logger;
+  //  @Autowired
+    private Logger logger;
 
 
     @Override
@@ -50,7 +51,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userName + " not found !"));
     }
     @Transactional
-    public UserDTO save(UserDTO userDTO) throws RepositoryTransactionException {
+    public String save(UserDTO userDTO) throws RepositoryTransactionException {
         if (userRepository.findUserByUserName(userDTO.getUserName()).isPresent()) {
             throw new ValidationException("User with the same name exists!");
         }
@@ -64,7 +65,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
             logger.error("Error saving user with user name: " + user.getUsername(), e);
             throw new RepositoryTransactionException("Error saving user with user name: " + user.getUsername(), e);
         }
-        return modelMapper.map(user, UserDTO.class);
+        return user.getUsername();
     }
 
     @Override
