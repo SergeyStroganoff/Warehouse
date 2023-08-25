@@ -6,7 +6,6 @@ import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import com.stroganov.warehouse.repository.UserRepository;
 import jakarta.validation.ValidationException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.PackagePrivate;
 import org.modelmapper.ModelMapper;
@@ -23,21 +22,21 @@ import java.util.Optional;
 
 @Service
 @Transactional
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @PackagePrivate
 public class UserServiceIml implements UserService, UserDetailsService {
 
     public static final String ERROR_DELETING_USER_WITH_USER_NAME = "Error deleting user with user name: ";
-   // @Autowired
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-  //  @Autowired
+    @Autowired
     private UserRepository userRepository;
 
-  //  @Autowired
+    @Autowired
     private ModelMapper modelMapper;
 
-  //  @Autowired
+    @Autowired
     private Logger logger;
 
 
