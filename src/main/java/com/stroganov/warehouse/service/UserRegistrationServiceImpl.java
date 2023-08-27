@@ -1,9 +1,9 @@
 package com.stroganov.warehouse.service;
 
+import com.stroganov.warehouse.domain.dto.user.AuthoritiesDTO;
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
 import com.stroganov.warehouse.domain.dto.user.UserRegistrationDTO;
 import com.stroganov.warehouse.domain.dto.warehouse.WarehouseDTO;
-import com.stroganov.warehouse.domain.model.user.Authorities;
 import com.stroganov.warehouse.domain.model.user.Role;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import lombok.NoArgsConstructor;
@@ -33,7 +33,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         UserDTO userDTO = modelMapper.map(userRegistrationDTO, UserDTO.class);
         WarehouseDTO warehouseDTO = modelMapper.map(userRegistrationDTO, WarehouseDTO.class);
         userDTO.getWarehouseDTOList().add(warehouseDTO);
-        Authorities authorities = new Authorities(Role.ROLE_ADMIN.toString());
+        AuthoritiesDTO authorities = new AuthoritiesDTO(Role.ROLE_ADMIN.toString());
         userDTO.getAuthorities().add(authorities);
         userDTO.setEnabled(Boolean.TRUE);
         userService.save(userDTO);

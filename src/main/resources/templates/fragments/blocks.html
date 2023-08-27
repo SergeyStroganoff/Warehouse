@@ -29,7 +29,7 @@
                  aria-expanded="false">Administrator</a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Add product range</a></li>
-                <li><a class="dropdown-item" th:href="@{/images/letter-w.png}">Add new user</a></li>
+                <li><a class="dropdown-item" th:href="@{/call-user-form}">Add new user</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
@@ -51,7 +51,7 @@
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <span class="navbar-text" th:inline="text">Hello <span th:remove="tag"
                                                                    sec:authentication="name">thymeleaf</span>!</span>
-            <form th:action="@{/logout}">
+            <form th:action="@{/logout}" method="post">
               <button class="btn btn-outline-primary">Log out</button>
             </form>
           </div>

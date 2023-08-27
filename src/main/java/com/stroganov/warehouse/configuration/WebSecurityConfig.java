@@ -32,8 +32,9 @@ public class WebSecurityConfig  {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/hello", "/registration", "/images/**", "/registration-action").permitAll()
+                        .requestMatchers("/", "/hello", "/admin-registration", "/images/**", "/registration-action").permitAll()
                         .requestMatchers("/main").hasAnyRole(Role.ROLE_USER.getValue(),Role.ROLE_ADMIN.getValue(),Role.ROLE_ACCOUNTANT.getValue(),Role.ROLE_WAREHOUSE.getValue())
+                        .requestMatchers("/call-user-form").hasRole(Role.ROLE_ADMIN.getValue())
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

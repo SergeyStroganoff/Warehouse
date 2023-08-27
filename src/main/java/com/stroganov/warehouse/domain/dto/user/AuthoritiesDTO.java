@@ -1,4 +1,12 @@
 package com.stroganov.warehouse.domain.dto.user;
 
-public record AuthoritiesDTO(String authority) {
+import lombok.*;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+public class AuthoritiesDTO {
+    private String authority;
 }

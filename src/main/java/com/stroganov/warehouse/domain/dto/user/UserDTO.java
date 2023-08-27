@@ -1,9 +1,9 @@
 package com.stroganov.warehouse.domain.dto.user;
 
 import com.stroganov.warehouse.domain.dto.warehouse.WarehouseDTO;
-import com.stroganov.warehouse.domain.model.user.Authorities;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,27 +24,16 @@ public class UserDTO {
     private String userName;
     @Size(min = 4, max = 12, message = "Password must be from 4 to 12 symbols")
     private String password;
-
     @NotBlank(message = "Full name can not be blank")
     private String fullName;
-
     @Email(message = "please text correct email")
     private String email;
     private boolean enabled;
-    private Set<Authorities> authorities = new HashSet<>();
+    @ToString.Exclude
+    @NotEmpty(message = "minimum one role must be chosen")
+    private Set<AuthoritiesDTO> authorities = new HashSet<>();
     @ToString.Exclude
     private List<WarehouseDTO> warehouseDTOList = new ArrayList<>();
-
-    public UserDTO(String userName, String password, String fullName, String email, boolean enabled
-            , List<WarehouseDTO> warehouseList, Set<Authorities> authorities) {
-        this.userName = userName;
-        this.password = password;
-        this.fullName = fullName;
-        this.email = email;
-        this.enabled = enabled;
-        this.authorities.addAll(authorities);
-        this.warehouseDTOList.addAll(warehouseList);
-    }
 
     public UserDTO(String userName, String password, String fullName, String email, boolean enabled) {
         this.userName = userName;

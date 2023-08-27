@@ -2,6 +2,7 @@ package com.stroganov.warehouse.service;
 
 
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
+import com.stroganov.warehouse.domain.model.user.Authorities;
 import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import com.stroganov.warehouse.repository.UserRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -38,7 +40,6 @@ public class UserServiceIml implements UserService, UserDetailsService {
 
     @Autowired
     private Logger logger;
-
 
     @Override
     @Transactional(readOnly = true)
@@ -73,9 +74,10 @@ public class UserServiceIml implements UserService, UserDetailsService {
         if (userRepository.findUserByUserName(userDTO.getUserName()).isEmpty()) {
             throw new UsernameNotFoundException("User with the  name: " + userDTO.getUserName() + " was not found");
         }
-        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        User user = modelMapper.map(userDTO, User.class);
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
         try {
-            userRepository.update(encodedPassword, userDTO.getFullName(), userDTO.getEmail(), userDTO.isEnabled(), userDTO.getAuthorities(), userDTO.getUserName());
+            userRepository.update(encodedPassword, user.getFullName(), user.getEmail(), user.isEnabled(), (Set<Authorities>) user.getAuthorities(), userDTO.getUserName());
         } catch (Exception e) {
             logger.error("Error updating user with user name: " + userDTO.getUserName(), e);
             throw new RepositoryTransactionException("Error updating user with user name: " + userDTO.getUserName(), e);
@@ -93,7 +95,6 @@ public class UserServiceIml implements UserService, UserDetailsService {
             throw new RepositoryTransactionException(ERROR_DELETING_USER_WITH_USER_NAME + user.getUsername(), e);
         }
     }
-
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDTO> findUserByName(String userName) {
