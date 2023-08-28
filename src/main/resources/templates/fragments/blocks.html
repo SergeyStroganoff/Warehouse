@@ -24,12 +24,16 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-            <li class="nav-item dropdown">
+            <li sec:authorize="hasRole('ADMIN')" class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                  aria-expanded="false">Administrator</a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Add product range</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
                 <li><a class="dropdown-item" th:href="@{/call-user-form}">Add new user</a></li>
+                <li><a class="dropdown-item" th:href="@{/call-user-management-form}">Manage users</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
@@ -49,8 +53,9 @@
 
           </ul>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <span class="navbar-text" th:inline="text">Hello <span th:remove="tag"
-                                                                   sec:authentication="name">thymeleaf</span>!</span>
+            <span class="navbar-text" th:inline="text">Hello <span th:remove="tag" sec:authentication="name">user</span>!
+              Your role is:  <span th:remove="tag" sec:authentication="principal.authorities">...</span>
+            </span>
             <form th:action="@{/logout}" method="post">
               <button class="btn btn-outline-primary">Log out</button>
             </form>

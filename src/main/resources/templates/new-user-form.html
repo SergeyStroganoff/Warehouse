@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,7 +67,6 @@
                                    th:field="*{authorities}"
                                    th:checked="${userDTO.authorities != null and userDTO.authorities.![role].contains(role)}">
                             <label class="form-check-label" for="role-check-box" th:text="${role}"></label><br>
-
                         </div>
                         <th:block th:if="${#fields.hasErrors('authorities')}">
                             <div th:errorclass='text-danger' th:errors="*{authorities}"></div>

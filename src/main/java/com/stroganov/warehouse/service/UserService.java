@@ -13,4 +13,6 @@ public interface UserService {
     void delete(String userName) throws RepositoryTransactionException;
 
     Optional<UserDTO> findUserByName(String userName);
+
+    Object getAuthenticatedUser();
 }

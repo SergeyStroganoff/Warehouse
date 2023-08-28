@@ -9,9 +9,9 @@ public enum Role {
     ROLE_WAREHOUSE("WAREHOUSE"),
     ROLE_ACCOUNTANT("ACCOUNTANT");
 
-    private final String value;
+    private final String roleName;
 
     Role(String value) {
-        this.value = value;
+        this.roleName = value;
     }
 }

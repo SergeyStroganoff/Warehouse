@@ -37,13 +37,15 @@ public class UserController {
 
 
     @GetMapping("/admin-registration")
-    public String showRegisterForm(UserRegistrationDTO userRegistrationDTO) {
+    public String showRegisterForm(UserRegistrationDTO userRegistrationDTO, Model model) {
+        model.addAttribute("availableRoles", Role.ROLE_ADMIN.toString());
         return REGISTRATION;
     }
 
     @PostMapping("/registration-action")
     public String registerAdmin(@Valid @ModelAttribute("userRegistrationDTO") UserRegistrationDTO userRegistrationDTO,
                                 BindingResult bindingResult, Model model) {
+        model.addAttribute("availableRoles", Role.ROLE_ADMIN.toString());
 
         if (bindingResult.hasErrors()) { // validation
             return REGISTRATION;
@@ -92,5 +94,12 @@ public class UserController {
         }
         model.addAttribute("notification", notification);
         return "main";
+    }
+
+    @GetMapping("/call-user-management-form") //TODO
+    public String showManagementUserForm(Model model) {
+        userService.getAuthenticatedUser();
+        model.addAttribute("listUserDTO", new UserDTO());
+        return NEW_USER_FORM;
     }
 }

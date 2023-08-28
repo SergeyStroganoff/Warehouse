@@ -12,6 +12,8 @@ import lombok.experimental.PackagePrivate;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,6 +32,7 @@ import java.util.Set;
 public class UserServiceIml implements UserService, UserDetailsService {
 
     public static final String ERROR_DELETING_USER_WITH_USER_NAME = "Error deleting user with user name: ";
+    public static final String UNAUTHORIZED_SESSION_MESSAGE = "Trying to get a user from an unauthorized session";
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -59,6 +63,10 @@ public class UserServiceIml implements UserService, UserDetailsService {
         String userPassword = user.getPassword();
         String encodedPassword = passwordEncoder.encode(userPassword);
         user.setPassword(encodedPassword);
+        if (user.getWarehouseList().isEmpty()) {
+            User currentAuthenticatedUser = (User) getAuthenticatedUser();
+            user.getWarehouseList().addAll(currentAuthenticatedUser.getWarehouseList());
+        }
         try {
             user = userRepository.save(user);
         } catch (Exception e) {
@@ -95,6 +103,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
             throw new RepositoryTransactionException(ERROR_DELETING_USER_WITH_USER_NAME + user.getUsername(), e);
         }
     }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDTO> findUserByName(String userName) {
@@ -104,5 +113,21 @@ public class UserServiceIml implements UserService, UserDetailsService {
         }
         UserDTO userDTO = modelMapper.map(userOptional.get(), UserDTO.class);
         return Optional.of(userDTO);
+    }
+
+    public List<UserDTO> getUsersByCurrentWarehouse() { //TODO
+        List<UserDTO> userDTOList = null;
+        return userDTOList;
+    }
+
+    @Override
+    public Object getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getPrincipal();
+        } else {
+            logger.error(UNAUTHORIZED_SESSION_MESSAGE);
+            throw new RuntimeException(UNAUTHORIZED_SESSION_MESSAGE);
+        }
     }
 }

@@ -33,8 +33,6 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         UserDTO userDTO = modelMapper.map(userRegistrationDTO, UserDTO.class);
         WarehouseDTO warehouseDTO = modelMapper.map(userRegistrationDTO, WarehouseDTO.class);
         userDTO.getWarehouseDTOList().add(warehouseDTO);
-        AuthoritiesDTO authorities = new AuthoritiesDTO(Role.ROLE_ADMIN.toString());
-        userDTO.getAuthorities().add(authorities);
         userDTO.setEnabled(Boolean.TRUE);
         userService.save(userDTO);
     }
