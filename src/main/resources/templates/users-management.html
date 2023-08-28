@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration form. Warehouse 1.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add your custom styles here */
+    </style>
+    <link rel="icon" th:href="@{/images/letter-w.png}" type="image/x-icon">
+</head>
+<body>
+<div th:replace="~{fragments/blocks.html :: header}"></div>
+
+<main class="container mt-5">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11 shadow p-3 mb-5 bg-body rounded" style="background-color: #f9f9f9">
+            <h4 class="mt-4 center">Users list:</h4>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Enabled</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${listUserDTO}">
+                    <td th:text="${user.userName}"></td>
+                    <td th:text="${user.fullName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:each="role : ${user.getAuthorities()}"><span th:text="${role.getAuthority()}"></span></td>
+                    <td>
+                        <input type="checkbox" th:checked="${user.isEnabled}" disabled>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" th:href="@{'/disable-enable/' + ${user.userName}}">Toggle
+                            Enabled</a>
+                        <a class="btn btn-sm btn-danger" th:href="@{'/delete/' + ${user.userName}}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="mt-4 fw-light">
+                The username must be unique and contain between 4 and 12 characters.
+                The password must be between 4 and 12 characters long.</p>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/blocks.html :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

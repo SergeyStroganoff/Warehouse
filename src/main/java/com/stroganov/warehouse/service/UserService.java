@@ -1,8 +1,10 @@
 package com.stroganov.warehouse.service;
 
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
+import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -15,4 +17,6 @@ public interface UserService {
     Optional<UserDTO> findUserByName(String userName);
 
     Object getAuthenticatedUser();
+
+    List<UserDTO> getAllConnectedUsers(String userName);
 }

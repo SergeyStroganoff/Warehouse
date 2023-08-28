@@ -10,6 +10,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.PackagePrivate;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,6 +35,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
 
     public static final String ERROR_DELETING_USER_WITH_USER_NAME = "Error deleting user with user name: ";
     public static final String UNAUTHORIZED_SESSION_MESSAGE = "Trying to get a user from an unauthorized session";
+    private static final String USER_DOES_T_HAVE_WAREHOUSE = "User warehouse list is empty. UserName: %s";
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -115,11 +118,6 @@ public class UserServiceIml implements UserService, UserDetailsService {
         return Optional.of(userDTO);
     }
 
-    public List<UserDTO> getUsersByCurrentWarehouse() { //TODO
-        List<UserDTO> userDTOList = null;
-        return userDTOList;
-    }
-
     @Override
     public Object getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -129,5 +127,27 @@ public class UserServiceIml implements UserService, UserDetailsService {
             logger.error(UNAUTHORIZED_SESSION_MESSAGE);
             throw new RuntimeException(UNAUTHORIZED_SESSION_MESSAGE);
         }
+    }
+
+    @Override
+    @Transactional
+    public List<UserDTO> getAllConnectedUsers(String userName) {
+        Optional<User> userOptional = userRepository.findUserByUserName(userName);
+        if (userOptional.isEmpty()) {
+            logger.error("There is no user: " + userName + " in database, - it is unlivable!");
+            throw new RuntimeException("There is no user: " + userName + " in database");
+        }
+        User userFromDataBase = userOptional.get();
+        if (userFromDataBase.getWarehouseList().isEmpty()) {
+            logger.warn(USER_DOES_T_HAVE_WAREHOUSE, userFromDataBase);
+            return Collections.emptyList();
+        }
+
+        List<User> userList = userFromDataBase.getWarehouseList().stream()
+                .flatMap(x -> x.getUserList().stream()).toList();
+        List<UserDTO> userDTOList = modelMapper.map(userList, new TypeToken<List<UserDTO>>() {
+        }.getType());
+        return userDTOList.stream().filter(x->!x.getUserName().equals(userName)).toList();
+
     }
 }

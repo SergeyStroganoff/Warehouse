@@ -4,10 +4,12 @@ import com.stroganov.warehouse.domain.dto.user.UserDTO;
 import com.stroganov.warehouse.domain.dto.user.UserRegistrationDTO;
 import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.domain.model.user.Role;
+import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import com.stroganov.warehouse.service.UserRegistrationService;
 import com.stroganov.warehouse.service.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -29,11 +33,15 @@ public class UserController {
     public static final String NEW_USER_FORM = "new-user-form";
     public static final String GLOBAL = "global";
     public static final String USER_WITH_SUCH_NAME_IS_PRESENT_MESSAGE = "User with such name is present, use another name.";
+    private static final String USERS_MANAGEMENT = "users-management";
     @Autowired
     private UserService userService;
 
     @Autowired
     private UserRegistrationService userRegistrationService;
+
+    @Autowired
+    private Logger logger;
 
 
     @GetMapping("/admin-registration")
@@ -96,10 +104,11 @@ public class UserController {
         return "main";
     }
 
-    @GetMapping("/call-user-management-form") //TODO
+    @GetMapping("/call-user-management-form")
     public String showManagementUserForm(Model model) {
-        userService.getAuthenticatedUser();
-        model.addAttribute("listUserDTO", new UserDTO());
-        return NEW_USER_FORM;
+        User user = (User) userService.getAuthenticatedUser();
+        List<UserDTO> userDTOList = userService.getAllConnectedUsers(user.getUsername());
+        model.addAttribute("listUserDTO", userDTOList);
+        return USERS_MANAGEMENT;
     }
 }
