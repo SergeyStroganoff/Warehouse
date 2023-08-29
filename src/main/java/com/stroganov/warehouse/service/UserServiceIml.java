@@ -5,6 +5,7 @@ import com.stroganov.warehouse.domain.dto.user.UserDTO;
 import com.stroganov.warehouse.domain.model.user.Authorities;
 import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
+import com.stroganov.warehouse.exception.UserNotExistException;
 import com.stroganov.warehouse.repository.UserRepository;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -147,7 +148,16 @@ public class UserServiceIml implements UserService, UserDetailsService {
                 .flatMap(x -> x.getUserList().stream()).toList();
         List<UserDTO> userDTOList = modelMapper.map(userList, new TypeToken<List<UserDTO>>() {
         }.getType());
-        return userDTOList.stream().filter(x->!x.getUserName().equals(userName)).toList();
+        return userDTOList.stream().filter(x -> !x.getUserName().equals(userName)).toList();
 
+    }
+
+    @Override
+    @Transactional
+    public void changeUserStatus(String userName) throws UserNotExistException {
+        User user = userRepository.findUserByUserName(userName)
+                .orElseThrow(() -> new UserNotExistException("User with email: " + userName + " not found !"));
+        user.setEnabled(!user.isEnabled());
+        userRepository.flush();
     }
 }

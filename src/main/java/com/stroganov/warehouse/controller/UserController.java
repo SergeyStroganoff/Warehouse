@@ -6,6 +6,7 @@ import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.domain.model.user.Role;
 import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
+import com.stroganov.warehouse.exception.UserNotExistException;
 import com.stroganov.warehouse.service.UserRegistrationService;
 import com.stroganov.warehouse.service.UserService;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -110,5 +112,25 @@ public class UserController {
         List<UserDTO> userDTOList = userService.getAllConnectedUsers(user.getUsername());
         model.addAttribute("listUserDTO", userDTOList);
         return USERS_MANAGEMENT;
+    }
+
+    @GetMapping("/user-disable-enable/")
+    public String changeUserStatus(@RequestParam(name = "userName") String userName, Model model) {
+        try {
+            userService.changeUserStatus(userName);
+        } catch (UserNotExistException e) {
+            logger.error(e.toString());
+        }
+        return showManagementUserForm(model);
+    }
+
+    @GetMapping("/user-delete/")
+    public String deleteUser(@RequestParam(name = "userName") String userName, Model model) {
+        try {
+            userService.delete(userName);
+        } catch (RepositoryTransactionException e) {
+            logger.error(e.toString());
+        }
+        return showManagementUserForm(model);
     }
 }

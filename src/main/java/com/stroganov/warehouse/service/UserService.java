@@ -3,6 +3,7 @@ package com.stroganov.warehouse.service;
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
 import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
+import com.stroganov.warehouse.exception.UserNotExistException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,6 @@ public interface UserService {
     Object getAuthenticatedUser();
 
     List<UserDTO> getAllConnectedUsers(String userName);
+
+    void changeUserStatus(String userName) throws UserNotExistException;
 }

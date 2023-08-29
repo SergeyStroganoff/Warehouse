@@ -34,14 +34,17 @@
                     <td th:text="${user.userName}"></td>
                     <td th:text="${user.fullName}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:each="role : ${user.getAuthorities()}"><span th:text="${role.getAuthority()}"></span></td>
+                    <td>
+                        <p th:each="role : ${user.getAuthorities()}" th:text="${role.getAuthority()}"></p>
+                    </td>
                     <td>
                         <input type="checkbox" th:checked="${user.isEnabled}" disabled>
                     </td>
                     <td>
-                        <a class="btn btn-sm btn-primary" th:href="@{'/disable-enable/' + ${user.userName}}">Toggle
-                            Enabled</a>
-                        <a class="btn btn-sm btn-danger" th:href="@{'/delete/' + ${user.userName}}">Delete</a>
+                        <a class="btn btn-sm btn-primary" th:href="@{/user-disable-enable/(userName=${user.userName})}"><span
+                                th:text="${user.isEnabled} ? 'Disable' : 'Enable'"></span></a>
+                        <a class="btn btn-sm btn-danger"
+                           th:href="@{/user-delete/(userName=${user.userName})}">Delete</a>
                     </td>
                 </tr>
                 </tbody>
