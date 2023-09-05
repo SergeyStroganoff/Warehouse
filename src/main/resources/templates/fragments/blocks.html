@@ -10,11 +10,9 @@
 <header th:fragment="header">
   <nav class="navbar navbar-expand-lg bg-body-secondary bg-gradient">
     <div class="container-fluid">
-
       <a class="navbar-brand" href="#"><img th:src="@{/images/letter-w.png}" width="30" height="30" alt="Logo W"
                                             loading="lazy"
                                             class="d-inline-block align-text-top"> Warehouse 1.0</a>
-
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +26,7 @@
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                  aria-expanded="false">Administrator</a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Add product range</a></li>
+                <li><a class="dropdown-item" th:href="@{/upload-product-line}">Add new product line</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
@@ -70,7 +68,7 @@
 <footer th:fragment="footer" class="bg-light text-center py-3">
   <div class="container">
     <p class="text-secondary">&copy; Copyright T&D Solutions. All Rights Reserved.</p>
-    <p class="text-secondary"> Designed by S.Stroganov</p>
+    <p class="text-secondary"> Designed by S.Stroganoff</p>
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>

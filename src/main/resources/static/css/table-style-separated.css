@@ -1,0 +1,14 @@
+th, td {
+    border-right: 1px solid #ddd;
+    font-size-adjust: inherit;
+    font-size: small;
+}
+
+th:last-child, td:last-child {
+    border-right: none; /* Remove right border for last column */
+}
+
+/* Optional: Add a bottom border to the table headers for a header row effect */
+th {
+    border-bottom: 1px solid #ddd;
+}

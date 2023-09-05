@@ -13,6 +13,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@NamedQuery(name = "User.update",query = """
+            update User u set u.password = ?1, u.fullName = ?2, u.email = ?3, u.enabled = ?4, u.authorities = ?5
+            where u.userName = ?6""")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

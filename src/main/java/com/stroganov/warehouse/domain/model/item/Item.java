@@ -38,7 +38,7 @@ public class Item {
     private ItemStyle itemStyle;
 
     @Column(name = "cost_price")
-    private double cost_price;
+    private double costPrice;
 
     @Column(name = "sell_price")
     private double sellPrice;

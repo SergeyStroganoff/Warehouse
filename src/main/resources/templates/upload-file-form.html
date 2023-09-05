@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration form. Warehouse 1.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{css/upload-file-form.css}" href=/static/css/upload-file-form.css rel="stylesheet">
+    <link th:href="@{css/table-style-separated.css}" href=/static/css/table-style-separated.css rel="stylesheet">
+    <link rel="icon" th:href="@{/images/letter-w.png}" type="image/x-icon">
+    <style>
+        /* Add custom CSS for cell borders */
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/blocks.html :: header}"></div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <h5 class="card-title mx-auto">Drag & Drop File Upload</h5>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" th:action="@{/upload-action}">
+                        <div id="drop-area" class="dropzone">
+                            <p class="text-center">Drag & Drop a file here</p>
+                            <!-- <input type="file" id="file-input" accept=".txt, .pdf, .jpg, .jpeg, .png" style="display: none;"> -->
+                            <input type="file" id="file-input" accept=".txt, .pdf, .jpg, .jpeg, .png"
+                                   style="display: none;" name="file"/>
+                        </div>
+                        <div id="file-list">
+                            <!-- Display uploaded files here -->
+                        </div>
+                        <input type="submit" id="upload-button" class="btn btn-primary btn-block mt-3" value="Upload"
+                               disabled/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <p>&nbsp;</p>
+            <p class="font-weight-lighter">
+                Explanation: It is possible to upload only EXEL format files with a size of no more than 5 MB. The data
+                should be generated on a sheet named &quot;List&quot;. The contents of the other sheets will be ignored.
+                The structure of the sheet table should be as follows:
+            </p>
+            <ol>
+                <li>Article,</li>
+                <li>Size: width</li>
+                <li>Size: height</li>
+                <li>Size: depth</li>
+                <li>Description</li>
+                <li>Style article</li>
+                <li>Style name</li>
+                <li>Manufacturer`s name</li>
+                <li>Manufacturer`s&nbsp;description</li>
+                <li>Cost price</li>
+                <li>Sale price&nbsp;</li>
+            </ol>
+            <p>Columns:&nbsp;Article, Style article,&nbsp;Manufacturer`s name&nbsp;must be filled in.</p>
+            <p>Example:</p>
+            <p>
+                <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false" aria-controls="collapseExample">Example</a>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Article</th>
+                        <th>Size: Width</th>
+                        <th>Size: Height</th>
+                        <th>Size: Depth</th>
+                        <th>Description</th>
+                        <th>Style Article</th>
+                        <th>Style Name</th>
+                        <th>Manufacturer's Name</th>
+                        <th>Manufacturer's Description</th>
+                        <th>Cost Price</th>
+                        <th>Sale Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>120 cm</td>
+                        <td>80 cm</td>
+                        <td>40 cm</td>
+                        <td>Wooden table</td>
+                        <td>TA-001</td>
+                        <td>Classic Style</td>
+                        <td>Furniture Co.</td>
+                        <td>High-quality wooden furniture</td>
+                        <td>$200</td>
+                        <td>$300</td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>150 cm</td>
+                        <td>90 cm</td>
+                        <td>50 cm</td>
+                        <td>Leather sofa</td>
+                        <td>SA-002</td>
+                        <td>Modern Style</td>
+                        <td>Sofa World</td>
+                        <td>Premium leather sofa</td>
+                        <td>$500</td>
+                        <td>$800</td>
+                    </tr>
+                    <tr>
+                        <td>003</td>
+                        <td>180 cm</td>
+                        <td>100 cm</td>
+                        <td>60 cm</td>
+                        <td>Dining table</td>
+                        <td>TA-003</td>
+                        <td>Contemporary Style</td>
+                        <td>Dining Essentials</td>
+                        <td>Sturdy dining table</td>
+                        <td>$250</td>
+                        <td>$400</td>
+                    </tr>
+                    <tr>
+                        <td>004</td>
+                        <td>80 cm</td>
+                        <td>120 cm</td>
+                        <td>30 cm</td>
+                        <td>Bookshelf</td>
+                        <td>BS-004</td>
+                        <td>Minimalist Style</td>
+                        <td>Bookshelf Co.</td>
+                        <td>Simple and elegant bookshelf</td>
+                        <td>$100</td>
+                        <td>$150</td>
+                    </tr>
+                    <tr>
+                        <td>005</td>
+                        <td>200 cm</td>
+                        <td>160 cm</td>
+                        <td>70 cm</td>
+                        <td>Wardrobe</td>
+                        <td>WD-005</td>
+                        <td>Classic Style</td>
+                        <td>Furniture Empire</td>
+                        <td>Spacious wardrobe</td>
+                        <td>$350</td>
+                        <td>$550</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/blocks.html :: footer}"></div>
+<script th:src="@{/js/upload-file-action.js}" src="/static/js/upload-file-action.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
