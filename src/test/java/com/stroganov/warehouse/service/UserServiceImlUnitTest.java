@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
@@ -48,9 +49,9 @@ class UserServiceImlUnitTest {
         Authorities authorities = new Authorities("ROLE_USER");
         WarehouseDTO warehouse = new WarehouseDTO("test warehouse", "1419 W Fullerton Ave, Chicago, IL 60614");
         userDTO = new UserDTO("test", "test", "user for test", "test@test.com", true);
-        userDTO.getAuthorities().add(authorities);
         userDTO.getWarehouseDTOList().add(warehouse);
-        user = new User(userDTO.getUserName(), userDTO.getPassword(), userDTO.getFullName(), userDTO.getEmail(), true, userDTO.getAuthorities(), userDTO.getWarehouseDTOList().stream().map(warehouseDTO -> new Warehouse(1, warehouseDTO.getWarehouseName(), warehouseDTO.getAddress(), new ArrayList<>())).toList());
+        Set<Authorities> authoritiesList = Set.of(authorities);
+        user = new User(userDTO.getUserName(), userDTO.getPassword(), userDTO.getFullName(), userDTO.getEmail(), true, authoritiesList, userDTO.getWarehouseDTOList().stream().map(warehouseDTO -> new Warehouse(1, warehouseDTO.getWarehouseName(), warehouseDTO.getAddress(), new ArrayList<>())).toList());
     }
 
 
@@ -82,7 +83,6 @@ class UserServiceImlUnitTest {
         String gottenUserName = userService.save(userDTO);
 
         // Verify the result
-
         assertThat(gottenUserName).isEqualTo("test");
         // Verify that the repository method was called
         verify(userRepository).save(user);

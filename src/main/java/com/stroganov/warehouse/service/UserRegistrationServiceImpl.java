@@ -1,10 +1,8 @@
 package com.stroganov.warehouse.service;
 
-import com.stroganov.warehouse.domain.dto.user.AuthoritiesDTO;
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
 import com.stroganov.warehouse.domain.dto.user.UserRegistrationDTO;
 import com.stroganov.warehouse.domain.dto.warehouse.WarehouseDTO;
-import com.stroganov.warehouse.domain.model.user.Role;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;

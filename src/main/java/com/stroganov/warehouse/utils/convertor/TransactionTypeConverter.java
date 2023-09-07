@@ -1,4 +1,4 @@
-package com.stroganov.warehouse.utils;
+package com.stroganov.warehouse.utils.convertor;
 
 import com.stroganov.warehouse.domain.model.transaction.TransactionType;
 import jakarta.persistence.AttributeConverter;
