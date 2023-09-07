@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +25,18 @@ public class ItemParserImpl implements ItemParser {
 
     @Override
     public List<Item> parseExelFile(Path exelFilePath) throws IOException, FileExtensionError, NoSuchSheetException {
+        List<Item> itemList = new ArrayList<>();
         Map<Integer, List<Object>> exelRowMap = exelFileReader.readExelTable(exelFilePath.toString(), sheetName);
+        verifyExelData(exelRowMap);
+        for (Map.Entry<Integer, List<Object>> entry : exelRowMap.entrySet()) {
+            entry.getValue();
+
+        }
 //TODO
         return null;
+    }
+
+    public void verifyExelData(Map<Integer, List<Object>> exelRowMap) {
+
     }
 }

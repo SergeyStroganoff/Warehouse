@@ -19,7 +19,7 @@ import java.nio.file.StandardCopyOption;
 @NoArgsConstructor
 public class FileSystemStorageService implements StorageService {
     public static final String FAILED_TO_STORE_EMPTY_FILE = "Failed to store empty file.";
-    Path currentTempDir = Path.of(System.getProperty("java.io.tmpdir"));
+    private final Path currentTempDir = Path.of(System.getProperty("java.io.tmpdir"));
 
     @Override
     public Path store(MultipartFile multiPartFile) throws StorageException {
