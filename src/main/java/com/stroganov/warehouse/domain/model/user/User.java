@@ -3,24 +3,27 @@ package com.stroganov.warehouse.domain.model.user;
 import com.stroganov.warehouse.domain.model.warehouse.Warehouse;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
-@NamedQuery(name = "User.update",query = """
-            update User u set u.password = ?1, u.fullName = ?2, u.email = ?3, u.enabled = ?4, u.authorities = ?5
-            where u.userName = ?6""")
+@NamedQuery(name = "User.update", query = """
+        update User u set u.password = ?1, u.fullName = ?2, u.email = ?3, u.enabled = ?4, u.authorities = ?5
+        where u.userName = ?6""")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
+@Cacheable
+@org.hibernate.annotations.Cache(region = "cache_region_user_entity",
+        usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
+)
 public class User implements UserDetails {
 
     @Id
@@ -73,5 +76,18 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return userName != null && Objects.equals(userName, user.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -65,16 +65,12 @@
                         <div class="form-check" th:each="role : ${availableRoles}">
                             <input class="form-check-input" type="checkbox" id="role-check-box" th:value="${role}"
                                    th:field="*{authorities}"
-                                   th:checked="${userDTO.authorities != null and userDTO.authorities.![role].contains(role)}">
+                                   th:checked="${#sets.contains(userDTO.authorities, role)}"  >
                             <label class="form-check-label" for="role-check-box" th:text="${role}"></label><br>
                         </div>
                         <th:block th:if="${#fields.hasErrors('authorities')}">
                             <div th:errorclass='text-danger' th:errors="*{authorities}"></div>
                         </th:block>
-                        <!--             <input type="checkbox" id="role-check-box" th:each="role : ${{'ROLE_ADMIN', 'ROLE_USER'}}"
-                                                 th:value="${role}" th:field="*{authorities[0].}" th:checked="${userDTO.roleSet.contains(role)}">
-                                          <label th:text="${role}"></label><br>
-                                          -->
                     </div>
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">Register</button>

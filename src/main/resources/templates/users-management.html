@@ -43,7 +43,7 @@
                     </td>
                     <td>
                         <a class="btn btn-sm btn-primary" th:href="@{/user-disable-enable/(userName=${user.userName})}"><span
-                                th:text="${user.isEnabled} ? 'Disable' : 'Enable'"></span>Edit <i class="bi bi-toggle-on"></i></a>
+                                th:text="${user.isEnabled} ? 'Disable' : 'Enable'">Edit</span><i class="bi bi-toggle-on"></i></a>
                         <a class="btn btn-sm btn-danger"
                            th:href="@{/user-delete/(userName=${user.userName})}">
                             Delete

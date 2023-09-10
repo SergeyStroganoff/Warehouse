@@ -3,6 +3,7 @@ package com.stroganov.warehouse.domain.model.warehouse;
 import com.stroganov.warehouse.domain.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +15,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Cacheable
+@org.hibernate.annotations.Cache(
+        usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
+)
 public class Warehouse implements Serializable {
     @Id
     @Column(name = "warehouse_id", nullable = false)

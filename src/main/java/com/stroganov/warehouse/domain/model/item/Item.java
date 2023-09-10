@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "item")
@@ -42,4 +44,32 @@ public class Item {
 
     @Column(name = "sell_price")
     private double sellPrice;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item item)) return false;
+
+        if (id != item.id) return false;
+        if (Double.compare(item.costPrice, costPrice) != 0) return false;
+        if (Double.compare(item.sellPrice, sellPrice) != 0) return false;
+        if (!Objects.equals(model, item.model)) return false;
+        if (!Objects.equals(producer, item.producer)) return false;
+        return Objects.equals(itemStyle, item.itemStyle);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id;
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        result = 31 * result + (producer != null ? producer.hashCode() : 0);
+        result = 31 * result + (itemStyle != null ? itemStyle.hashCode() : 0);
+        temp = Double.doubleToLongBits(costPrice);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(sellPrice);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }
