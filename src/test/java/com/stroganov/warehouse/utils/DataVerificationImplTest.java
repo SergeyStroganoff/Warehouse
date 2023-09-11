@@ -16,15 +16,14 @@ import java.util.Map;
 @ExtendWith(MockitoExtension.class)
 class DataVerificationImplTest {
     @Mock
-    Logger logger;
+    private Logger logger;
 
     @InjectMocks
     private DataVerification dataVerification = new DataVerificationImpl();
-
-    private final Map<Integer, List<Object>> mapForTest = new HashMap<>();
-    private final List<Object> rightObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", 1989.12);
-    private final List<Object> wrongCountParametersObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200");
-    private final List<Object> wrongParameterSizeObjectList = List.of("И12", "30", "34 1/2", "12346789011", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", "$300");
+    private final Map<Integer, List<String>> mapForTest = new HashMap<>();
+    private final List<String> rightObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", Double.toString(1989.12));
+    private final List<String> wrongCountParametersObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200");
+    private final List<String> wrongParameterSizeObjectList = List.of("И12", "30", "34 1/2", "12346789011", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", "$300");
 
     @Test
     void when_verify_then_return_true() throws DataVerificationException {
@@ -33,7 +32,6 @@ class DataVerificationImplTest {
         //when
         boolean result = dataVerification.verify(mapForTest);
         //then
-        //Assertions.assertThat(result).isTrue();
         Assertions.assertTrue(result);
     }
 

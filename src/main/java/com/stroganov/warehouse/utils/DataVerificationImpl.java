@@ -16,7 +16,7 @@ public class DataVerificationImpl implements DataVerification {
     public Logger logger;
 
     @Override
-    public boolean verify(Map<Integer, List<Object>> exelRowMap) throws DataVerificationException {
+    public boolean verify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException {
         if (exelRowMap == null) {
             throw new RuntimeException("Method parameter can not be null");
         }
@@ -27,39 +27,49 @@ public class DataVerificationImpl implements DataVerification {
         }
 
         List<String> cellSizeErrorList = new ArrayList<>();
-        for (Map.Entry<Integer, List<Object>> entry : exelRowMap.entrySet()) {
-            List<Object> objectList = entry.getValue();
-            if (objectList.size() != 11) {
+        List<String> priceErrorList = new ArrayList<>();
+        for (Map.Entry<Integer, List<String>> entry : exelRowMap.entrySet()) {
+            List<String> cellValueList = entry.getValue();
+            if (cellValueList.size() != 11) {
                 StringBuilder errorMessage = new StringBuilder();
                 errorMessage.append("Parameters count incorrect, check row: ").append(entry.getKey());
                 logger.debug(errorMessage.toString());
                 throw new DataVerificationException(errorMessage.toString());
             }
-            String firstCell = (String) objectList.get(0);
+            String firstCell = cellValueList.get(0);
             if (firstCell.equals("Article")) {
                 continue;
             }
-            if (objectList.get(0).toString().length() > 12 ||
-                    objectList.get(1).toString().length() > 10 ||
-                    objectList.get(2).toString().length() > 10 ||
-                    objectList.get(3).toString().length() > 10 ||
-                    objectList.get(4).toString().length() > 250 ||
-                    objectList.get(5).toString().length() > 10 ||
-                    objectList.get(6).toString().length() > 35 ||
-                    objectList.get(7).toString().length() > 20 ||
-                    objectList.get(8).toString().length() > 255 ||
-                    objectList.get(9).toString().length() > 18 ||
-                    objectList.get(10).toString().length() > 18) {
+            if (cellValueList.get(0).length() > 12 ||
+                    cellValueList.get(1).length() > 10 ||
+                    cellValueList.get(2).length() > 10 ||
+                    cellValueList.get(3).length() > 10 ||
+                    cellValueList.get(4).length() > 250 ||
+                    cellValueList.get(5).length() > 10 ||
+                    cellValueList.get(6).length() > 35 ||
+                    cellValueList.get(7).length() > 20 ||
+                    cellValueList.get(8).length() > 255 ||
+                    cellValueList.get(9).length() > 18 ||
+                    cellValueList.get(10).length() > 18) {
                 cellSizeErrorList.add(entry.getKey().toString());
             }
-
-            if (!cellSizeErrorList.isEmpty()) {
-                StringBuilder errorMessage = new StringBuilder();
-                errorMessage.append("Parameter sizes  incorrect, check rows: ");
-                cellSizeErrorList.forEach(s -> errorMessage.append(s).append(","));
-                logger.debug(errorMessage.toString());
-                throw new DataVerificationException(errorMessage.toString());
+            if (!cellValueList.get(9).matches("\\$?\\w+.?\\w{0,2}") || !cellValueList.get(10).matches("\\$?\\w+.?\\w{0,2}")) {
+                priceErrorList.add(entry.getKey().toString());
             }
+        }
+        if (!cellSizeErrorList.isEmpty()) {
+            StringBuilder errorMessage = new StringBuilder();
+            errorMessage.append("Parameter sizes  incorrect, check rows: ");
+            cellSizeErrorList.forEach(s -> errorMessage.append(s).append(","));
+            logger.debug(errorMessage.toString());
+            throw new DataVerificationException(errorMessage.toString());
+        }
+        if (!priceErrorList.isEmpty()) {
+            StringBuilder errorMessage = new StringBuilder();
+            errorMessage.append("Cost and sale price incorrect, check rows: ");
+            priceErrorList.forEach(s -> errorMessage.append(s).append(","));
+            logger.debug(errorMessage.toString());
+            throw new DataVerificationException(errorMessage.toString());
         }
         return Boolean.TRUE;
     }

@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface ExelFileReader {
-    Map<Integer, List<Object>> readExelTable(String file, String sheetName) throws IOException, FileExtensionError, NoSuchSheetException;
+    Map<Integer, List<String>> readExelTable(String file, String sheetName) throws IOException, FileExtensionError, NoSuchSheetException;
 }

@@ -1,8 +1,13 @@
 package com.stroganov.warehouse.controller;
 
+import com.stroganov.warehouse.domain.model.item.Item;
 import com.stroganov.warehouse.domain.model.service.Notification;
+import com.stroganov.warehouse.exception.DataVerificationException;
+import com.stroganov.warehouse.exception.FileExtensionError;
+import com.stroganov.warehouse.exception.NoSuchSheetException;
 import com.stroganov.warehouse.exception.StorageException;
 import com.stroganov.warehouse.service.StorageService;
+import com.stroganov.warehouse.utils.ItemParser;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,19 +17,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Set;
 
 
 @Controller
 public class ProductLineController {
 
-    private final String ERROR_MESSAGE = "Failed unload file: ";
-
+    private final String SAVING_ERROR_MESSAGE = "Failed unload file: ";
+    private final String LOADING_ERROR_MESSAGE = "Failed loading file: ";
     @Autowired
     private Logger logger;
-
     @Autowired
     private StorageService storageService;
+
+    @Autowired
+    private ItemParser itemParser;
 
     @GetMapping("/upload-product-line")
     public String showRegisterForm(Model model) {
@@ -35,17 +44,41 @@ public class ProductLineController {
     public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
         Path fileUploadedPath;
         Notification notification;
+        Set<Item> itemSet;
         try {
             fileUploadedPath = storageService.store(file);
 
         } catch (StorageException e) {
             logger.error("Error during saving file: " + file.getOriginalFilename(), e);
-            notification = new Notification("Error", ERROR_MESSAGE + e.getMessage());
+
+            notification = new Notification("Error", SAVING_ERROR_MESSAGE + e.getMessage());
+            model.addAttribute("notification", notification);
+            return "upload-file-form";
+        }
+        try {
+            itemSet = itemParser.parseExelFile(fileUploadedPath);
+        } catch (IOException e) {
+            logger.error("Error during load saved file: " + file.getOriginalFilename(), e);
+            notification = new Notification("Error", LOADING_ERROR_MESSAGE + e.getMessage());
+            model.addAttribute("notification", notification);
+            return "upload-file-form";
+        } catch (FileExtensionError e) {
+            logger.debug("File format invalid: " + file.getOriginalFilename(), e);
+            notification = new Notification("Error", "File format incorrect");
+            model.addAttribute("notification", notification);
+            return "upload-file-form";
+        } catch (NoSuchSheetException e) {
+            logger.debug("Required sheet was not found in file: " + file.getOriginalFilename(), e);
+            notification = new Notification("Error", "Required sheet was not found in file");
+            model.addAttribute("notification", notification);
+            return "upload-file-form";
+        } catch (DataVerificationException e) {
+            logger.debug("File validation error: " + file.getOriginalFilename(), e);
+            notification = new Notification("Error", e.getMessage());
             model.addAttribute("notification", notification);
             return "upload-file-form";
         }
         notification = new Notification("Success", "You successfully uploaded " + file.getOriginalFilename() + "!");
-
         model.addAttribute("notification", notification);
         return "upload-file-form";
     }

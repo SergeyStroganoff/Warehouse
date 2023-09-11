@@ -23,8 +23,8 @@ public class ExelFileReaderImpl implements ExelFileReader {
     public Logger logger;
 
     @Override
-    public Map<Integer, List<Object>> readExelTable(String file, String sheetName) throws IOException, FileExtensionError, NoSuchSheetException {
-        Map<Integer, List<Object>> exelTable;
+    public Map<Integer, List<String>> readExelTable(String file, String sheetName) throws IOException, FileExtensionError, NoSuchSheetException {
+        Map<Integer, List<String>> exelTable;
         try (Workbook workbook = loadWorkbook(file)) {
             Iterator<Sheet> sheetIterator = workbook.sheetIterator();
             while (sheetIterator.hasNext()) {
@@ -52,8 +52,8 @@ public class ExelFileReaderImpl implements ExelFileReader {
         }
     }
 
-    private HashMap<Integer, List<Object>> processSheet(Sheet sheet) {
-        HashMap<Integer, List<Object>> data = new HashMap<>();
+    private HashMap<Integer, List<String>> processSheet(Sheet sheet) {
+        HashMap<Integer, List<String>> data = new HashMap<>();
         Iterator<Row> iterator = sheet.rowIterator();
         for (int rowIndex = 0; iterator.hasNext(); rowIndex++) {
             Row row = iterator.next();
@@ -62,24 +62,24 @@ public class ExelFileReaderImpl implements ExelFileReader {
         return data;
     }
 
-    private void processRow(HashMap<Integer, List<Object>> data, int rowIndex, Row row) {
+    private void processRow(HashMap<Integer, List<String>> data, int rowIndex, Row row) {
         data.put(rowIndex, new ArrayList<>());
         for (Cell cell : row) {
             processCell(cell, data.get(rowIndex));
         }
     }
 
-    private void processCell(Cell cell, List<Object> dataRow) {
+    private void processCell(Cell cell, List<String> dataRow) {
         switch (cell.getCellType()) {
             case STRING -> dataRow.add(cell.getStringCellValue());
             case NUMERIC -> {
                 if (DateUtil.isCellDateFormatted(cell)) {
-                    dataRow.add(cell.getLocalDateTimeCellValue());
+                    dataRow.add(cell.getLocalDateTimeCellValue().toString());
                 } else {
                     dataRow.add(NumberToTextConverter.toText(cell.getNumericCellValue()));
                 }
             }
-            case BOOLEAN -> dataRow.add(cell.getBooleanCellValue());
+            case BOOLEAN -> dataRow.add(Boolean.toString(cell.getBooleanCellValue()));
             case FORMULA -> dataRow.add(cell.getCellFormula());
             default -> dataRow.add(UNDEFINED);
         }

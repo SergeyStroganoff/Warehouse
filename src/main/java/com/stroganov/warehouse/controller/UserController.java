@@ -56,7 +56,6 @@ public class UserController {
     public String registerAdmin(@Valid @ModelAttribute("userRegistrationDTO") UserRegistrationDTO userRegistrationDTO,
                                 BindingResult bindingResult, Model model) {
         model.addAttribute("availableRoles", Role.ROLE_ADMIN.toString());
-
         if (bindingResult.hasErrors()) { // validation
             return REGISTRATION;
         }
@@ -93,7 +92,6 @@ public class UserController {
             bindingResult.addError(new ObjectError(GLOBAL, USER_WITH_SUCH_NAME_IS_PRESENT_MESSAGE));
             return NEW_USER_FORM;
         }
-
         userDTO.setEnabled(Boolean.TRUE);
         Notification notification;
         try {
