@@ -3,8 +3,10 @@ package com.stroganov.warehouse.utils;
 import com.stroganov.warehouse.domain.model.item.*;
 import com.stroganov.warehouse.exception.DataVerificationException;
 import com.stroganov.warehouse.exception.FileExtensionError;
+import com.stroganov.warehouse.exception.FileParsingException;
 import com.stroganov.warehouse.exception.NoSuchSheetException;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,17 +30,35 @@ public class ItemParserImpl implements ItemParser {
     @Autowired
     private DataVerification dataVerification;
 
+    @Autowired
+    private Logger logger;
+
     @Override
-    public Set<Item> parseExelFile(Path exelFilePath) throws IOException, FileExtensionError, NoSuchSheetException, DataVerificationException {
+    public Set<Item> parseExelFile(Path exelFilePath) throws FileParsingException {
         Set<Item> itemSet = new HashSet<>();
-        Map<Integer, List<String>> exelRowMap = exelFileReader.readExelTable(exelFilePath.toString(), sheetName);
-        if (dataVerification.verify(exelRowMap)) {
-            for (List<String> objectList : exelRowMap.values()) {
-                if (objectList.get(0).equals("Article")) {
-                    continue;
+        Map<Integer, List<String>> exelRowMap = null;
+        try {
+            exelRowMap = exelFileReader.readExelTable(exelFilePath.toString(), sheetName);
+            if (dataVerification.verify(exelRowMap)) {
+                for (List<String> objectList : exelRowMap.values()) {
+                    if (objectList.get(0).equals("Article")) {
+                        continue;
+                    }
+                    itemSet.add(parseItem(objectList));
                 }
-                itemSet.add(parseItem(objectList));
             }
+        } catch (IOException e) {
+            logger.error("Error during load saved file: " + exelFilePath, e);
+            throw new FileParsingException("Failed loading file", e);
+        } catch (FileExtensionError e) {
+            logger.error("File format incorrect", e);
+            throw new FileParsingException("File format incorrect", e);
+        } catch (NoSuchSheetException e) {
+            logger.error("Required sheet was not found in file: " + exelFilePath, e);
+            throw new FileParsingException("Required sheet was not found in file", e);
+        } catch (DataVerificationException e) {
+            logger.debug("File validation error: " + exelFilePath, e);
+            throw new FileParsingException("File validation error:" + e.getMessage(), e);
         }
         return itemSet;
     }
@@ -55,7 +75,6 @@ public class ItemParserImpl implements ItemParser {
         String manufactureDescription = objectList.get(8);
         double costPrice = Double.parseDouble(objectList.get(9).replace("$", "").trim());
         double salePrice = Double.parseDouble(objectList.get(10).replace("$", "").trim());
-
         Dimension dimension = new Dimension(0, width, height, depth);
         ItemStyle itemStyle = new ItemStyle(0, styleArticle, styleName);
         Manufacture manufacture = new Manufacture(0, manufactureName, manufactureDescription);
