@@ -7,6 +7,7 @@ import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.domain.model.warehouse.Warehouse;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import com.stroganov.warehouse.repository.UserRepository;
+import com.stroganov.warehouse.service.user.UserServiceIml;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

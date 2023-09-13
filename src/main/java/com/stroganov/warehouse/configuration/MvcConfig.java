@@ -2,8 +2,6 @@ package com.stroganov.warehouse.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +26,6 @@ public class MvcConfig implements WebMvcConfigurer {
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
         return modelMapper;
     }
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/hello").setViewName("hello");

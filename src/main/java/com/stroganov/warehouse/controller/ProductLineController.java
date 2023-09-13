@@ -5,6 +5,7 @@ import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.exception.FileParsingException;
 import com.stroganov.warehouse.exception.StorageException;
 import com.stroganov.warehouse.service.StorageService;
+import com.stroganov.warehouse.service.item.ItemService;
 import com.stroganov.warehouse.utils.ItemParser;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ import java.util.Set;
 @Controller
 public class ProductLineController {
 
+    public static final String NOTIFICATION = "notification";
     private final String SAVING_ERROR_MESSAGE = "Failed unload file: ";
-    private final String LOADING_ERROR_MESSAGE = "Failed loading file: ";
     @Autowired
     private Logger logger;
     @Autowired
@@ -31,6 +32,9 @@ public class ProductLineController {
 
     @Autowired
     private ItemParser itemParser;
+
+    @Autowired
+    private ItemService itemService;
 
     @GetMapping("/upload-product-line")
     public String showRegisterForm(Model model) {
@@ -47,20 +51,20 @@ public class ProductLineController {
         } catch (StorageException e) {
             logger.error("Error during saving file: " + file.getOriginalFilename(), e);
             notification = new Notification("Error", SAVING_ERROR_MESSAGE + e.getMessage());
-            model.addAttribute("notification", notification);
+            model.addAttribute(NOTIFICATION, notification);
             return "upload-file-form";
         }
         try {
             itemSet = itemParser.parseExelFile(fileUploadedPath);
         } catch (FileParsingException e) {
-            logger.error("File parsing error: " + file.getOriginalFilename(), e);
+            logger.error("File parsing error: " + fileUploadedPath, e);
             notification = new Notification("Error", e.getMessage());
-            model.addAttribute("notification", notification);
+            model.addAttribute(NOTIFICATION, notification);
             return "upload-file-form";
         }
-
+        itemService.saveAllUnique(itemSet);
         notification = new Notification("Success", "You successfully uploaded " + file.getOriginalFilename() + "!");
-        model.addAttribute("notification", notification);
+        model.addAttribute(NOTIFICATION, notification);
         return "upload-file-form";
     }
 }

@@ -1,4 +1,4 @@
-package com.stroganov.warehouse.service;
+package com.stroganov.warehouse.service.user;
 
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
 import com.stroganov.warehouse.domain.dto.user.UserRegistrationDTO;

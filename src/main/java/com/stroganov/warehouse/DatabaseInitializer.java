@@ -4,7 +4,7 @@ import com.stroganov.warehouse.domain.dto.user.AuthoritiesDTO;
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
 import com.stroganov.warehouse.domain.dto.warehouse.WarehouseDTO;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
-import com.stroganov.warehouse.service.UserService;
+import com.stroganov.warehouse.service.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

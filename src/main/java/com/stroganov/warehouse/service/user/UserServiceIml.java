@@ -1,4 +1,4 @@
-package com.stroganov.warehouse.service;
+package com.stroganov.warehouse.service.user;
 
 
 import com.stroganov.warehouse.domain.dto.user.UserDTO;
@@ -7,6 +7,7 @@ import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import com.stroganov.warehouse.exception.UserNotExistException;
 import com.stroganov.warehouse.repository.UserRepository;
+import com.stroganov.warehouse.service.user.UserService;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.PackagePrivate;
