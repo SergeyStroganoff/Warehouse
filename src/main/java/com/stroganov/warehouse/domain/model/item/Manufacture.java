@@ -2,11 +2,13 @@ package com.stroganov.warehouse.domain.model.item;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Immutable;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "manufacture")
+@Immutable
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

@@ -3,12 +3,14 @@ package com.stroganov.warehouse.domain.model.item;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Objects;
 
 
 @Entity
 @Table(name = "item")
+@DynamicUpdate()
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

@@ -3,12 +3,14 @@ package com.stroganov.warehouse.domain.model.item;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Immutable;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "item_style",
         uniqueConstraints = {@UniqueConstraint(name = "UniqueStyleArticleName", columnNames = {"style_article", "style_name"})})
+@Immutable
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

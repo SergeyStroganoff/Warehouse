@@ -3,11 +3,13 @@ package com.stroganov.warehouse.domain.model.item;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Immutable;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "dimension")
+@Immutable
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
