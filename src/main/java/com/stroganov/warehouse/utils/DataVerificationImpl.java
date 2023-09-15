@@ -37,7 +37,7 @@ public class DataVerificationImpl implements DataVerification {
                 throw new DataVerificationException(errorMessage.toString());
             }
             String firstCell = cellValueList.get(0);
-            if (firstCell.equals("Article")) {
+            if ("Article".equalsIgnoreCase(firstCell)) {
                 continue;
             }
             if (cellValueList.get(0).length() > 12 ||

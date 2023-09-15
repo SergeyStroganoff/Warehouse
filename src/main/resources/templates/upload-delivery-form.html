@@ -8,9 +8,6 @@
     <link th:href="@{/../../css/upload-file-form.css}" rel="stylesheet">
     <link th:href="@{/../../css/table-style-separated.css}" rel="stylesheet">
     <link rel="icon" th:href="@{/images/letter-w.png}" type="image/x-icon">
-    <style>
-        /* Add custom CSS for cell borders */
-    </style>
 </head>
 <body>
 <div th:replace="~{fragments/blocks.html :: header}"></div>
@@ -20,23 +17,34 @@
             <div class="card">
                 <h5 class="card-title mx-auto">Drag & Drop File Upload</h5>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" th:action="@{/upload-action}">
-                        <div id="drop-area" class="dropzone">
-                            <p class="text-center">Drag & Drop a file here</p>
-                            <input type="file" id="file-input" accept=".xls,.xlsx"
-                                   style="display: none;" name="file"/>
+                    <form method="POST" enctype="multipart/form-data" th:action="@{/upload/delivery}">
+                        <div class="form-group">
+                            <div id="drop-area" class="dropzone">
+                                <p class="text-center">Drag & Drop a file here</p>
+                                <input type="file" id="file-input" accept=".xls,.xlsx"
+                                       style="display: none;" name="file"/>
+                            </div>
                         </div>
                         <div id="file-list">
                             <!-- Display uploaded files here -->
                         </div>
-                        <input type="submit" id="upload-button" class="btn btn-primary btn-block mt-3" value="Upload"
-                               disabled/>
+                        <div class="d-flex flex-row justify-content-between ">
+                            <input type="submit" id="upload-button" class="btn btn-primary btn-block mt-4"
+                                   value="Upload"
+                                   disabled/>
+                            <div class="form-group col-3 ">
+                                <label for="selectOption">Select a Template Option:</label>
+                                <select class="form-control" id="selectOption" name="selectedOption">
+                                    <option value="none">None</option>
+                                    <option value="NCK">Nordic Color Kitchen</option>
+                                </select>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-8 mx-auto">
             <p>&nbsp;</p>
@@ -60,31 +68,42 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Article</th>
-                        <th>Quantity</th>
-
+                        <th>article</th>
+                        <th>manufacture name</th>
+                        <th>style article</th>
+                        <th>quantity</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Item 1</td>
-                        <td>210</td>
+                        <td>KC001</td>
+                        <td>ABC Cabinets</td>
+                        <td>Modern Style</td>
+                        <td>10</td>
                     </tr>
                     <tr>
-                        <td>Item 2</td>
-                        <td>150</td>
+                        <td>KC002</td>
+                        <td>XYZ Cabinets</td>
+                        <td>Traditional Style</td>
+                        <td>8</td>
                     </tr>
                     <tr>
-                        <td>Item 3</td>
-                        <td>255</td>
+                        <td>KC003</td>
+                        <td>DEF Cabinets</td>
+                        <td>Contemporary Style</td>
+                        <td>12</td>
                     </tr>
                     <tr>
-                        <td>Item 4</td>
-                        <td>450</td>
+                        <td>KC004</td>
+                        <td>GHI Cabinets</td>
+                        <td>Rustic Style</td>
+                        <td>6</td>
                     </tr>
                     <tr>
-                        <td>Item 5</td>
-                        <td>75</td>
+                        <td>KC005</td>
+                        <td>JKL Cabinets</td>
+                        <td>Transitional Style</td>
+                        <td>15</td>
                     </tr>
                     </tbody>
                 </table>

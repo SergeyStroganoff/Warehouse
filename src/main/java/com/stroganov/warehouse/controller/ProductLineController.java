@@ -24,7 +24,7 @@ import java.util.Set;
 public class ProductLineController {
 
     public static final String NOTIFICATION = "notification";
-    private final String SAVING_ERROR_MESSAGE = "Failed unload file: ";
+    public static final String SAVING_ERROR_MESSAGE = "Failed unload file: ";
     @Autowired
     private Logger logger;
     @Autowired
@@ -41,7 +41,7 @@ public class ProductLineController {
         return "upload-file-form";
     }
 
-    @PostMapping("/upload-action")
+    @PostMapping("/upload/products")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
         Path fileUploadedPath;
         Notification notification;
