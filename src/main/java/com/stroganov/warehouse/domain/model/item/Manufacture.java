@@ -2,6 +2,7 @@ package com.stroganov.warehouse.domain.model.item;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
 
 import java.util.Objects;
@@ -9,6 +10,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "manufacture")
 @Immutable
+@org.hibernate.annotations.Cache(
+        usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

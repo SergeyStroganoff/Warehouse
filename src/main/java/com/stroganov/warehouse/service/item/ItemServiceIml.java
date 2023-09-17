@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -53,11 +55,12 @@ public class ItemServiceIml implements ItemService {
     }
 
     @Override
-    public void saveAllUnique(Set<Item> itemSet) {
+    public List<Item> saveAllUnique(Set<Item> itemSet) {
         Optional<ItemStyle> itemStyle;
         Optional<Manufacture> manufacture;
         Optional<Model> model;
         Optional<Dimension> dimension = Optional.empty();
+        List<Item> itemList = new ArrayList<>(itemSet.size());
         for (Item item : itemSet) {
             itemStyle = itemStyleService.findItemStyleByStyleArticleAndStyleName(
                     item.getItemStyle().getStyleArticle(),
@@ -82,7 +85,9 @@ public class ItemServiceIml implements ItemService {
             model.ifPresent(item::setModel);
             manufacture.ifPresent(item::setProducer);
             dimension.ifPresent(item.getModel()::setDimension);
-            itemRepository.save(item);
+            Item savedItem = itemRepository.save(item);
+            itemList.add(savedItem);
         }
+        return itemList;
     }
 }

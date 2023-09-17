@@ -1,8 +1,8 @@
 package com.stroganov.warehouse.domain.model.item;
 
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
 
 import java.util.Objects;
@@ -11,6 +11,9 @@ import java.util.Objects;
 @Table(name = "item_style",
         uniqueConstraints = {@UniqueConstraint(name = "UniqueStyleArticleName", columnNames = {"style_article", "style_name"})})
 @Immutable
+@org.hibernate.annotations.Cache(
+        usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

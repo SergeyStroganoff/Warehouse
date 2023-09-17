@@ -4,6 +4,7 @@ import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRow;
 import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.exception.StorageException;
 import com.stroganov.warehouse.service.StorageService;
+import com.stroganov.warehouse.service.user.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,10 @@ public class TransactionController {
     @Autowired
     private StorageService storageService;
 
+    @Autowired
+    UserService userService;
+
+
     @GetMapping("/upload/delivery-form")
     public String showRegisterForm() {
         return UPLOAD_DELIVERY_FORM_ADDRESS;
@@ -46,7 +51,7 @@ public class TransactionController {
             model.addAttribute(NOTIFICATION, notification);
             return UPLOAD_DELIVERY_FORM_ADDRESS;
         }
-        System.out.println(selectedOption);
+
 
         //  try {
         //      exelTransactionRowSet = batchTransactionParser.parseExelFile(fileUploadedPath);

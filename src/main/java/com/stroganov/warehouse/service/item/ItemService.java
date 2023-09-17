@@ -2,6 +2,7 @@ package com.stroganov.warehouse.service.item;
 
 import com.stroganov.warehouse.domain.model.item.Item;
 
+import java.util.List;
 import java.util.Set;
 
 public interface ItemService {
@@ -11,5 +12,5 @@ public interface ItemService {
 
     void delete(Item item);
 
-    void saveAllUnique(Set<Item> itemSet);
+    List<Item> saveAllUnique(Set<Item> itemSet);
 }

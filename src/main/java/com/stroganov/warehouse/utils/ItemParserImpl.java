@@ -36,7 +36,7 @@ public class ItemParserImpl implements ItemParser {
     @Override
     public Set<Item> parseExelFile(Path exelFilePath) throws FileParsingException {
         Set<Item> itemSet = new HashSet<>();
-        Map<Integer, List<String>> exelRowMap = null;
+        Map<Integer, List<String>> exelRowMap;
         try {
             exelRowMap = exelFileReader.readExelTable(exelFilePath.toString(), sheetName);
             if (dataVerification.verify(exelRowMap)) {

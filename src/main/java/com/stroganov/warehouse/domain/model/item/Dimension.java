@@ -3,6 +3,7 @@ package com.stroganov.warehouse.domain.model.item;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
 
 import java.util.Objects;
@@ -10,6 +11,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "dimension")
 @Immutable
+@org.hibernate.annotations.Cache(
+        usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

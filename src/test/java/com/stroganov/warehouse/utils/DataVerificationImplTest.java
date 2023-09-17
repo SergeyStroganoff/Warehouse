@@ -19,7 +19,7 @@ class DataVerificationImplTest {
     private Logger logger;
 
     @InjectMocks
-    private DataVerification dataVerification = new DataVerificationImpl();
+    private final DataVerification dataVerification = new DataVerificationImpl();
     private final Map<Integer, List<String>> mapForTest = new HashMap<>();
     private final List<String> rightObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", Double.toString(1989.12));
     private final List<String> wrongCountParametersObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200");

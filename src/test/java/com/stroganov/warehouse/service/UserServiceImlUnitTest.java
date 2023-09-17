@@ -46,7 +46,7 @@ class UserServiceImlUnitTest {
 
 
     @BeforeAll
-    private static void init() {
+    public static void init() {
         Authorities authorities = new Authorities("ROLE_USER");
         WarehouseDTO warehouse = new WarehouseDTO("test warehouse", "1419 W Fullerton Ave, Chicago, IL 60614");
         userDTO = new UserDTO("test", "test", "user for test", "test@test.com", true);
