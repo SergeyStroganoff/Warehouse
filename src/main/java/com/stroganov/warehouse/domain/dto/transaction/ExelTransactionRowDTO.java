@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ExelTransactionRow {
+public class ExelTransactionRowDTO {
     private String modelArticle;
     private String manufactureName;
     private String styleArticle;

@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StockServiceImpl implements StockService {  //TODO
@@ -31,13 +32,18 @@ public class StockServiceImpl implements StockService {  //TODO
         List<Warehouse> warehouses = warehouseService.getUserWarehouseList();
         Assert.notEmpty(warehouses, "Warehouse list can't be empty");
         Warehouse defaultWarehouse = warehouses.get(0);
-        defaultWarehouse = warehouseService.findById(defaultWarehouse.getId()).get();
-        List<Stock> stockList = new ArrayList<>();
-        for (Item currentItem : item) {
-            Stock stock = new Stock(0, currentItem, 0, defaultWarehouse);
-            stockList.add(stock);
+        Optional<Warehouse> warehouseOptional = warehouseService.findById(defaultWarehouse.getId());
+        if (warehouseOptional.isPresent()) {
+            List<Stock> stockList = new ArrayList<>();
+            for (Item currentItem : item) {
+                Stock stock = new Stock(0, currentItem, 0, warehouseOptional.get());
+                stockList.add(stock);
+            }
+            stockRepository.saveAll(stockList);
+        } else {
+            logger.error("Warehouse was not found: " + defaultWarehouse);
+            throw new RuntimeException("Warehouse was not found");
         }
-        stockRepository.saveAll(stockList);
     }
 
     @Override

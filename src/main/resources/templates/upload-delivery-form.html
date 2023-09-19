@@ -34,9 +34,11 @@
                                    disabled/>
                             <div class="form-group col-3 ">
                                 <label for="selectOption">Select a Template Option:</label>
-                                <select class="form-control" id="selectOption" name="selectedOption">
-                                    <option value="none">None</option>
-                                    <option value="NCK">Nordic Color Kitchen</option>
+                                <select class="form-control" id="selectOption"
+                                        name="selectedOption">
+                                    <option th:each="option:${deliveryParserOptions}" th:text="${option}"
+                                            th:value="${option}">None
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -59,7 +61,7 @@
                 <li>Amount</li>
             </ol>
             <p>All columns must be filled in.</p>
-            <p>Example:</p>
+            <p>Example: (Simple template)</p>
             <p>
                 <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
                    aria-expanded="false" aria-controls="collapseExample">Example</a>

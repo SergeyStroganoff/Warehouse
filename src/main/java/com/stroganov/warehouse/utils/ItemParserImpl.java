@@ -39,7 +39,7 @@ public class ItemParserImpl implements ItemParser {
         Map<Integer, List<String>> exelRowMap;
         try {
             exelRowMap = exelFileReader.readExelTable(exelFilePath.toString(), sheetName);
-            if (dataVerification.verify(exelRowMap)) {
+            if (dataVerification.itemListVerify(exelRowMap)) {
                 for (List<String> objectList : exelRowMap.values()) {
                     if ("Article".equalsIgnoreCase(objectList.get(0))) {
                         continue;

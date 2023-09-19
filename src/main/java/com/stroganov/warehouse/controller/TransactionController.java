@@ -1,10 +1,10 @@
 package com.stroganov.warehouse.controller;
 
-import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRow;
+import com.stroganov.warehouse.domain.dto.transaction.DeliveryParserOptions;
+import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRowDTO;
 import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.exception.StorageException;
 import com.stroganov.warehouse.service.StorageService;
-import com.stroganov.warehouse.service.user.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,12 +29,10 @@ public class TransactionController {
     @Autowired
     private StorageService storageService;
 
-    @Autowired
-    UserService userService;
-
 
     @GetMapping("/upload/delivery-form")
-    public String showRegisterForm() {
+    public String showRegisterForm(Model model) {
+        model.addAttribute("deliveryParserOptions", DeliveryParserOptions.values());
         return UPLOAD_DELIVERY_FORM_ADDRESS;
     }
 
@@ -42,7 +40,7 @@ public class TransactionController {
     public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("selectedOption") String selectedOption, Model model) {
         Path fileUploadedPath;
         Notification notification;
-        Set<ExelTransactionRow> exelTransactionRowSet;
+        Set<ExelTransactionRowDTO> exelTransactionRowSet;
         try {
             fileUploadedPath = storageService.store(file);
         } catch (StorageException e) {

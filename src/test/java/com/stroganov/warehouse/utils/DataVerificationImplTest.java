@@ -30,7 +30,7 @@ class DataVerificationImplTest {
         // given
         mapForTest.put(1, rightObjectList);
         //when
-        boolean result = dataVerification.verify(mapForTest);
+        boolean result = dataVerification.itemListVerify(mapForTest);
         //then
         Assertions.assertTrue(result);
     }
@@ -42,7 +42,7 @@ class DataVerificationImplTest {
         //when
         //then
         DataVerificationException exception = Assertions.assertThrows(DataVerificationException.class, () -> {
-            dataVerification.verify(mapForTest);
+            dataVerification.itemListVerify(mapForTest);
         }, "DataVerificationException was expected");
     }
 
@@ -53,7 +53,7 @@ class DataVerificationImplTest {
         //when
         //then
         DataVerificationException exception = Assertions.assertThrows(DataVerificationException.class, () -> {
-            dataVerification.verify(mapForTest);
+            dataVerification.itemListVerify(mapForTest);
         }, "DataVerificationException was expected");
     }
 }

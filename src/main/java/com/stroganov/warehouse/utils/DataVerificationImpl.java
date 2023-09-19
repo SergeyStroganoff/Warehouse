@@ -16,7 +16,7 @@ public class DataVerificationImpl implements DataVerification {
     public Logger logger;
 
     @Override
-    public boolean verify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException {
+    public boolean itemListVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException {
         if (exelRowMap == null) {
             throw new RuntimeException("Method parameter can not be null");
         }
