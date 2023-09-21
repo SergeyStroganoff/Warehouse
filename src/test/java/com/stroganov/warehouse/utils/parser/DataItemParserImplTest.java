@@ -1,4 +1,4 @@
-package com.stroganov.warehouse.utils;
+package com.stroganov.warehouse.utils.parser;
 
 import com.stroganov.warehouse.domain.model.item.*;
 import com.stroganov.warehouse.utils.parser.DataItemParserImpl;
