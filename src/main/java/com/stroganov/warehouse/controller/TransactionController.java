@@ -3,10 +3,15 @@ package com.stroganov.warehouse.controller;
 import com.stroganov.warehouse.domain.dto.transaction.DeliveryParserOptions;
 import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRowDTO;
 import com.stroganov.warehouse.domain.model.service.Notification;
+import com.stroganov.warehouse.exception.FileParsingException;
 import com.stroganov.warehouse.exception.StorageException;
+import com.stroganov.warehouse.service.DataStorageHandler;
 import com.stroganov.warehouse.service.StorageService;
+import com.stroganov.warehouse.utils.parser.DataParser;
+import com.stroganov.warehouse.utils.verifier.DataVerifier;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +34,17 @@ public class TransactionController {
     @Autowired
     private StorageService storageService;
 
+    @Autowired
+    @Qualifier("transactionListVerifierImpl")
+    private DataVerifier transactionListVerifierImpl;
+
+    @Autowired
+    @Qualifier("transactionParserImpl")
+    private DataParser<ExelTransactionRowDTO> exelTransactionRowDTODataParser;
+
+    @Autowired
+    private DataStorageHandler<ExelTransactionRowDTO> dataStorageHandler;
+
 
     @GetMapping("/upload/delivery-form")
     public String showRegisterForm(Model model) {
@@ -49,17 +65,16 @@ public class TransactionController {
             model.addAttribute(NOTIFICATION, notification);
             return UPLOAD_DELIVERY_FORM_ADDRESS;
         }
-
-
-        //  try {
-        //      exelTransactionRowSet = batchTransactionParser.parseExelFile(fileUploadedPath);
-        //  } catch (FileParsingException e) {
-        //      logger.error("File parsing error: " + fileUploadedPath, e);
-        //      notification = new Notification("Error", e.getMessage());
-        //      model.addAttribute(NOTIFICATION, notification);
-        //      return UPLOAD_DELIVERY_FORM_ADDRESS;
-        //  }
-        //   transactionService.saveAllUnique(exelTransactionRowSet); TODO  transaction method;
+        try {
+            exelTransactionRowSet = dataStorageHandler.parseExelFile(fileUploadedPath, exelTransactionRowDTODataParser, transactionListVerifierImpl);
+        } catch (FileParsingException e) {
+            logger.error("File parsing error: " + fileUploadedPath, e);
+            notification = new Notification("Error", e.getMessage());
+            model.addAttribute(NOTIFICATION, notification);
+            return UPLOAD_DELIVERY_FORM_ADDRESS;
+        }
+        //TODO transaction method;
+        //transactionService.saveAllUnique(exelTransactionRowSet);
         notification = new Notification("Success", "You successfully uploaded " + file.getOriginalFilename() + "!");
         model.addAttribute(NOTIFICATION, notification);
         return UPLOAD_DELIVERY_FORM_ADDRESS;

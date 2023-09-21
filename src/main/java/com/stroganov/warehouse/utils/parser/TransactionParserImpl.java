@@ -1,6 +1,7 @@
-package com.stroganov.warehouse.utils;
+package com.stroganov.warehouse.utils.parser;
 
 import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRowDTO;
+import com.stroganov.warehouse.utils.parser.DataParser;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

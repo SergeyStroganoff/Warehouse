@@ -1,4 +1,4 @@
-package com.stroganov.warehouse.utils;
+package com.stroganov.warehouse.utils.verifier;
 
 import com.stroganov.warehouse.exception.DataVerificationException;
 import org.slf4j.Logger;
@@ -11,23 +11,15 @@ import java.util.Map;
 
 @Component
 public class ItemVerifierImpl implements DataVerifier {
-
     @Autowired
     public Logger logger;
+    public static final String ARTICLE = "Article";
 
     @Override
     public boolean dataVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException {
-        if (exelRowMap == null) {
-            throw new RuntimeException("Method parameter can not be null");
-        }
-        if (exelRowMap.isEmpty()) {
-            String errorMessage = String.format("Method parameter can not be null. %s", this.getClass().getName());
-            logger.error(errorMessage);
-            throw new DataVerificationException("Verification error: Data set is empty");
-        }
-
+        DataVerifier.notNullOrEmptyCheck(exelRowMap, logger);
         List<String> cellSizeErrorList = new ArrayList<>();
-        List<String> priceErrorList = new ArrayList<>();
+        List<String> cellFormatErrorList = new ArrayList<>();
         for (Map.Entry<Integer, List<String>> entry : exelRowMap.entrySet()) {
             List<String> cellValueList = entry.getValue();
             if (cellValueList.size() != 11) {
@@ -37,7 +29,7 @@ public class ItemVerifierImpl implements DataVerifier {
                 throw new DataVerificationException(errorMessage.toString());
             }
             String firstCell = cellValueList.get(0);
-            if ("Article".equalsIgnoreCase(firstCell)) {
+            if (ARTICLE.equalsIgnoreCase(firstCell)) {
                 continue;
             }
             if (cellValueList.get(0).length() > 12 ||
@@ -54,23 +46,10 @@ public class ItemVerifierImpl implements DataVerifier {
                 cellSizeErrorList.add(entry.getKey().toString());
             }
             if (!cellValueList.get(9).matches("\\$?\\w+.?\\w{0,2}") || !cellValueList.get(10).matches("\\$?\\w+.?\\w{0,2}")) {
-                priceErrorList.add(entry.getKey().toString());
+                cellFormatErrorList.add(entry.getKey().toString());
             }
         }
-        if (!cellSizeErrorList.isEmpty()) {
-            StringBuilder errorMessage = new StringBuilder();
-            errorMessage.append("Parameter sizes  incorrect, check rows: ");
-            cellSizeErrorList.forEach(s -> errorMessage.append(s).append(","));
-            logger.debug(errorMessage.toString());
-            throw new DataVerificationException(errorMessage.toString());
-        }
-        if (!priceErrorList.isEmpty()) {
-            StringBuilder errorMessage = new StringBuilder();
-            errorMessage.append("Cost and sale price incorrect, check rows: ");
-            priceErrorList.forEach(s -> errorMessage.append(s).append(","));
-            logger.debug(errorMessage.toString());
-            throw new DataVerificationException(errorMessage.toString());
-        }
-        return Boolean.TRUE;
+        return DataVerifier.CheckParsingErrors(cellSizeErrorList, cellFormatErrorList, logger);
     }
 }
+

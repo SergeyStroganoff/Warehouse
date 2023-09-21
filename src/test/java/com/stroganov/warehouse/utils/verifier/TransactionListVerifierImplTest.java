@@ -1,4 +1,4 @@
-package com.stroganov.warehouse.utils;
+package com.stroganov.warehouse.utils.verifier;
 
 import com.stroganov.warehouse.exception.DataVerificationException;
 import org.junit.jupiter.api.Assertions;
@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
-class ItemVerifierImplTest {
+class TransactionListVerifierImplTest {
+
     @Mock
     private Logger logger;
-
     @InjectMocks
-    private final DataVerifier dataVerifier = new ItemVerifierImpl();
+    private TransactionListVerifierImpl dataVerifier;
     private final Map<Integer, List<String>> mapForTest = new HashMap<>();
-    private final List<String> rightObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", Double.toString(1989.12));
+    private final List<String> rightObjectList = List.of("B12", "NWS", "T100", "100");
     private final List<String> wrongCountParametersObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200");
-    private final List<String> wrongParameterSizeObjectList = List.of("И12", "30", "34 1/2", "12346789011", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", "$300");
+    private final List<String> wrongParameterSizeObjectList = List.of("B12", "NWS", "T100", "1004566666664");
 
     @Test
     void when_verify_then_return_true() throws DataVerificationException {

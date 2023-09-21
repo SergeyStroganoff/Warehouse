@@ -1,8 +1,8 @@
 package com.stroganov.warehouse.configuration;
 
 import com.stroganov.warehouse.domain.model.item.Item;
-import com.stroganov.warehouse.utils.DataItemParserImpl;
-import com.stroganov.warehouse.utils.DataParser;
+import com.stroganov.warehouse.utils.parser.DataItemParserImpl;
+import com.stroganov.warehouse.utils.parser.DataParser;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.springframework.context.annotation.Bean;

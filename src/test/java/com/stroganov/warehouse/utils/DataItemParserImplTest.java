@@ -1,6 +1,8 @@
 package com.stroganov.warehouse.utils;
 
 import com.stroganov.warehouse.domain.model.item.*;
+import com.stroganov.warehouse.utils.parser.DataItemParserImpl;
+import com.stroganov.warehouse.utils.parser.DataParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

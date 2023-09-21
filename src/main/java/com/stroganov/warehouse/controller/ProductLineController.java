@@ -9,8 +9,8 @@ import com.stroganov.warehouse.service.DataStorageHandler;
 import com.stroganov.warehouse.service.StorageService;
 import com.stroganov.warehouse.service.item.ItemService;
 import com.stroganov.warehouse.service.warehouse.StockService;
-import com.stroganov.warehouse.utils.DataParser;
-import com.stroganov.warehouse.utils.DataVerifier;
+import com.stroganov.warehouse.utils.parser.DataParser;
+import com.stroganov.warehouse.utils.verifier.DataVerifier;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,16 +52,6 @@ public class ProductLineController {
     @Autowired
     @Qualifier("dataItemParserImpl")
     public DataParser<Item> itemDataParser;
-
-    @Autowired
-    @Qualifier("transactionListVerifierImpl")
-    private DataVerifier transactionListVerifierImpl;
-
-
-    @Autowired
-    @Qualifier("transactionParserImpl")
-    private DataParser<ExelTransactionRowDTO> exelTransactionRowDTODataParser;
-
 
     @GetMapping("/upload-product-line")
     public String showRegisterForm(Model model) {
