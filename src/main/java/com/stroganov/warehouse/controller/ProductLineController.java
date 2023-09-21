@@ -1,15 +1,19 @@
 package com.stroganov.warehouse.controller;
 
+import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRowDTO;
 import com.stroganov.warehouse.domain.model.item.Item;
 import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.exception.FileParsingException;
 import com.stroganov.warehouse.exception.StorageException;
+import com.stroganov.warehouse.service.DataStorageHandler;
 import com.stroganov.warehouse.service.StorageService;
 import com.stroganov.warehouse.service.item.ItemService;
 import com.stroganov.warehouse.service.warehouse.StockService;
-import com.stroganov.warehouse.utils.ItemParser;
+import com.stroganov.warehouse.utils.DataParser;
+import com.stroganov.warehouse.utils.DataVerifier;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +35,33 @@ public class ProductLineController {
     private Logger logger;
     @Autowired
     private StorageService storageService;
+
     @Autowired
-    private ItemParser itemParser;
+    private DataStorageHandler<Item> dataStorageHandler;
 
     @Autowired
     private ItemService itemService;
 
     @Autowired
     StockService stockService;
+
+    @Autowired
+    @Qualifier("itemVerifierImpl")
+    private DataVerifier itemVerifierImpl;
+
+    @Autowired
+    @Qualifier("dataItemParserImpl")
+    public DataParser<Item> itemDataParser;
+
+    @Autowired
+    @Qualifier("transactionListVerifierImpl")
+    private DataVerifier transactionListVerifierImpl;
+
+
+    @Autowired
+    @Qualifier("transactionParserImpl")
+    private DataParser<ExelTransactionRowDTO> exelTransactionRowDTODataParser;
+
 
     @GetMapping("/upload-product-line")
     public String showRegisterForm(Model model) {
@@ -59,7 +82,7 @@ public class ProductLineController {
             return UPLOAD_FILE_FORM;
         }
         try {
-            itemSet = itemParser.parseExelFile(fileUploadedPath);
+            itemSet = dataStorageHandler.parseExelFile(fileUploadedPath, itemDataParser, itemVerifierImpl);
         } catch (FileParsingException e) {
             logger.error("File parsing error: " + fileUploadedPath, e);
             notification = new Notification("Error", e.getMessage());

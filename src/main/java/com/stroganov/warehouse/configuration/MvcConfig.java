@@ -1,5 +1,8 @@
 package com.stroganov.warehouse.configuration;
 
+import com.stroganov.warehouse.domain.model.item.Item;
+import com.stroganov.warehouse.utils.DataItemParserImpl;
+import com.stroganov.warehouse.utils.DataParser;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +29,12 @@ public class MvcConfig implements WebMvcConfigurer {
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
         return modelMapper;
     }
+
+    @Bean
+    public DataParser<Item> dataParser() {
+        return new DataItemParserImpl();
+    }
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/hello").setViewName("hello");

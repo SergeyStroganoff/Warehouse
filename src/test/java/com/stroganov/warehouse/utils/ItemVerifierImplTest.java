@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
-class DataVerificationImplTest {
+class ItemVerifierImplTest {
     @Mock
     private Logger logger;
 
     @InjectMocks
-    private final DataVerification dataVerification = new DataVerificationImpl();
+    private final DataVerifier dataVerifier = new ItemVerifierImpl();
     private final Map<Integer, List<String>> mapForTest = new HashMap<>();
     private final List<String> rightObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200", Double.toString(1989.12));
     private final List<String> wrongCountParametersObjectList = List.of("B12", "30", "34 1/2", "42", "Base cabinet", "T100", "Shaker White", "NWS", "Nordic company", "$200");
@@ -30,7 +30,7 @@ class DataVerificationImplTest {
         // given
         mapForTest.put(1, rightObjectList);
         //when
-        boolean result = dataVerification.itemListVerify(mapForTest);
+        boolean result = dataVerifier.dataVerify(mapForTest);
         //then
         Assertions.assertTrue(result);
     }
@@ -42,7 +42,7 @@ class DataVerificationImplTest {
         //when
         //then
         DataVerificationException exception = Assertions.assertThrows(DataVerificationException.class, () -> {
-            dataVerification.itemListVerify(mapForTest);
+            dataVerifier.dataVerify(mapForTest);
         }, "DataVerificationException was expected");
     }
 
@@ -53,7 +53,7 @@ class DataVerificationImplTest {
         //when
         //then
         DataVerificationException exception = Assertions.assertThrows(DataVerificationException.class, () -> {
-            dataVerification.itemListVerify(mapForTest);
+            dataVerifier.dataVerify(mapForTest);
         }, "DataVerificationException was expected");
     }
 }

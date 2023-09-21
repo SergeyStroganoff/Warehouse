@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class DataVerificationImpl implements DataVerification {
+public class ItemVerifierImpl implements DataVerifier {
 
     @Autowired
     public Logger logger;
 
     @Override
-    public boolean itemListVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException {
+    public boolean dataVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException {
         if (exelRowMap == null) {
             throw new RuntimeException("Method parameter can not be null");
         }
