@@ -41,13 +41,21 @@ public class StockServiceImpl implements StockService {
             }
             stockRepository.saveAll(stockList);
         } else {
-            logger.error(String.format("Warehouse was not found: %s" , defaultWarehouse) );
+            logger.error(String.format("Warehouse was not found: %s", defaultWarehouse));
             throw new RuntimeException("Warehouse was not found");
         }
     }
 
+    @Override
     public Optional<Stock> getCurrentStockByItemParams(String modelArticle, String manufactureName, String styleArticle) {
         return stockRepository.findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticle(modelArticle, manufactureName, styleArticle);
+    }
+
+    @Override
+    public Optional<Integer> findStockIdByModelArticleProducerNameStyleArticle(
+            String modelArticle, String producerName, String styleArticle) {
+        return Optional.ofNullable(stockRepository.findStockIdByModelArticleProducerNameStyleArticle(
+                modelArticle, producerName, styleArticle));
     }
 
     @Override

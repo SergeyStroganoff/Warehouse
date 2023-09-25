@@ -2,9 +2,8 @@ package com.stroganov.warehouse.service.transaction;
 
 import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRowDTO;
 import com.stroganov.warehouse.domain.model.transaction.TransactionType;
-import com.stroganov.warehouse.domain.model.warehouse.Stock;
 import com.stroganov.warehouse.exception.TransactionServiceException;
-import com.stroganov.warehouse.repository.StockRepository;
+import com.stroganov.warehouse.service.warehouse.StockService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class TransactionService {
     private Logger logger;
 
     @Autowired
-    private StockRepository stockRepository;
+    private StockService stockService;
 
     @Transactional
     public String doTransaction(Set<ExelTransactionRowDTO> rowDTOSet, TransactionType transactionType) throws TransactionServiceException {
@@ -42,7 +41,7 @@ public class TransactionService {
     public List<ExelTransactionRowDTO> getRecordsNotPresentInStock(Iterable<ExelTransactionRowDTO> iterableDTO) {
         List<ExelTransactionRowDTO> resultList = new ArrayList<>();
         for (ExelTransactionRowDTO dto : iterableDTO) {
-            Optional<Stock> optionalStock = stockRepository.findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticle(
+            Optional<Integer> optionalStock = stockService.findStockIdByModelArticleProducerNameStyleArticle(
                     dto.getModelArticle(), dto.getManufactureName(), dto.getStyleArticle());
             if (optionalStock.isEmpty()) {
                 resultList.add(dto);

@@ -48,7 +48,7 @@ public class ItemServiceIml implements ItemService {
 
     public Optional<Integer> getItemIdByArticleManufactureNameStyle(String modelArticle, String manufactureName, String styleArticle) {
         Integer itemID = itemRepository.findItemIdsByModelNameAndStyleArticle(modelArticle, manufactureName, styleArticle);
-        return Optional.of(itemID);
+        return Optional.ofNullable(itemID);
     }
 
     @Override
