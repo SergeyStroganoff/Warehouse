@@ -1,6 +1,5 @@
 package com.stroganov.warehouse.controller;
 
-import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRowDTO;
 import com.stroganov.warehouse.domain.model.item.Item;
 import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.exception.FileParsingException;
@@ -60,19 +59,17 @@ public class ProductLineController {
 
     @PostMapping("/upload/products")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
-        Path fileUploadedPath;
+        Path fileUploadedPath = null;
         Notification notification;
         Set<Item> itemSet;
         try {
             fileUploadedPath = storageService.store(file);
+            itemSet = dataStorageHandler.parseExelFile(fileUploadedPath, itemDataParser, itemVerifierImpl);
         } catch (StorageException e) {
             logger.error("Error during saving file: " + file.getOriginalFilename(), e);
             notification = new Notification("Error", SAVING_ERROR_MESSAGE + e.getMessage());
             model.addAttribute(NOTIFICATION, notification);
             return UPLOAD_FILE_FORM;
-        }
-        try {
-            itemSet = dataStorageHandler.parseExelFile(fileUploadedPath, itemDataParser, itemVerifierImpl);
         } catch (FileParsingException e) {
             logger.error("File parsing error: " + fileUploadedPath, e);
             notification = new Notification("Error", e.getMessage());
@@ -80,8 +77,10 @@ public class ProductLineController {
             return UPLOAD_FILE_FORM;
         }
         List<Item> savedItems = itemService.saveAllUnique(itemSet);
-        stockService.stockInitialisation(savedItems,0);
-        notification = new Notification("Success", "You successfully uploaded " + file.getOriginalFilename() + "!");
+        if (!savedItems.isEmpty()) {
+            stockService.stockInitialisation(savedItems, 0);
+        }
+        notification = new Notification("Success", String.format("You've uploaded: %s items from: %s", savedItems.size(),file.getOriginalFilename()));
         model.addAttribute(NOTIFICATION, notification);
         return UPLOAD_FILE_FORM;
     }

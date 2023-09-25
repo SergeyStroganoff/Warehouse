@@ -3,16 +3,12 @@ package com.stroganov.warehouse.service.item;
 import com.stroganov.warehouse.domain.model.item.*;
 import com.stroganov.warehouse.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -20,25 +16,17 @@ import java.util.Set;
 public class ItemServiceIml implements ItemService {
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private Logger logger;
     @Autowired
     private ItemRepository itemRepository;
-
     @Autowired
     ModelService modelService;
-
     @Autowired
     private ItemStyleService itemStyleService;
-
     @Autowired
     private DimensionService dimensionService;
-
     @Autowired
     private ManufactureService manufactureService;
-
     @Override
     public void saveAll(Set<Item> itemList) {
         itemRepository.saveAll(itemList);
@@ -54,8 +42,21 @@ public class ItemServiceIml implements ItemService {
         itemRepository.delete(item);
     }
 
+    public Optional<Item> getItemByArticleManufactureNameStyle(String modelArticle, String manufactureName, String styleArticle) {
+        return itemRepository.findByModel_ArticleAndProducer_NameAndItemStyle_StyleArticle(modelArticle, manufactureName, styleArticle);
+    }
+
+    public Optional<Integer> getItemIdByArticleManufactureNameStyle(String modelArticle, String manufactureName, String styleArticle) {
+        Integer itemID = itemRepository.findItemIdsByModelNameAndStyleArticle(modelArticle, manufactureName, styleArticle);
+        return Optional.of(itemID);
+    }
+
     @Override
     public List<Item> saveAllUnique(Set<Item> itemSet) {
+        removeItemsIfPresentInDB_V2(itemSet);
+        if (itemSet.isEmpty()) {
+            return Collections.emptyList();
+        }
         Optional<ItemStyle> itemStyle;
         Optional<Manufacture> manufacture;
         Optional<Model> model;
@@ -89,5 +90,34 @@ public class ItemServiceIml implements ItemService {
             itemList.add(savedItem);
         }
         return itemList;
+    }
+
+    private void removeItemsIfPresentInDB(Set<Item> itemSet) {
+        Iterator<Item> itemIterator = itemSet.iterator();
+        while (itemIterator.hasNext()) {
+            Item currentItem = itemIterator.next();
+            Optional<Item> currentOptionalItem = getItemByArticleManufactureNameStyle(  //getItemByArticleManufactureNameStyle
+                    currentItem.getModel().getArticle(),
+                    currentItem.getProducer().getName(),
+                    currentItem.getItemStyle().getStyleArticle()
+            );
+            if (currentOptionalItem.isPresent()) {
+                itemIterator.remove();
+            }
+        }
+    }
+
+    private void removeItemsIfPresentInDB_V2(Set<Item> itemSet) {
+        Iterator<Item> itemIterator = itemSet.iterator();
+        while (itemIterator.hasNext()) {
+            Item currentItem = itemIterator.next();
+            Optional<Integer> currentOptionalItem = getItemIdByArticleManufactureNameStyle(  //getItemByArticleManufactureNameStyle
+                    currentItem.getModel().getArticle(),
+                    currentItem.getProducer().getName(),
+                    currentItem.getItemStyle().getStyleArticle());
+            if (currentOptionalItem.isPresent()) {
+                itemIterator.remove();
+            }
+        }
     }
 }

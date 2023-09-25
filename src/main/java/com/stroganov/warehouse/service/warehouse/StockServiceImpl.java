@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StockServiceImpl implements StockService {  //TODO
+@Transactional
+public class StockServiceImpl implements StockService {
 
     @Autowired
     public Logger logger;
@@ -26,7 +27,6 @@ public class StockServiceImpl implements StockService {  //TODO
     private StockRepository stockRepository;
 
     @Override
-    @Transactional
     public void stockInitialisation(Iterable<Item> item, int startAmount) {
         Assert.notNull(item, "Error, item list can't be NULL");
         List<Warehouse> warehouses = warehouseService.getUserWarehouseList();
@@ -41,9 +41,13 @@ public class StockServiceImpl implements StockService {  //TODO
             }
             stockRepository.saveAll(stockList);
         } else {
-            logger.error("Warehouse was not found: " + defaultWarehouse);
+            logger.error(String.format("Warehouse was not found: %s" , defaultWarehouse) );
             throw new RuntimeException("Warehouse was not found");
         }
+    }
+
+    public Optional<Stock> getCurrentStockByItemParams(String modelArticle, String manufactureName, String styleArticle) {
+        return stockRepository.findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticle(modelArticle, manufactureName, styleArticle);
     }
 
     @Override

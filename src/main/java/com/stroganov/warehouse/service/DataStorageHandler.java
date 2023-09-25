@@ -4,9 +4,9 @@ import com.stroganov.warehouse.exception.DataVerificationException;
 import com.stroganov.warehouse.exception.FileExtensionError;
 import com.stroganov.warehouse.exception.FileParsingException;
 import com.stroganov.warehouse.exception.NoSuchSheetException;
+import com.stroganov.warehouse.utils.ExelFileReader;
 import com.stroganov.warehouse.utils.parser.DataParser;
 import com.stroganov.warehouse.utils.verifier.DataVerifier;
-import com.stroganov.warehouse.utils.ExelFileReader;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -31,7 +31,6 @@ public class DataStorageHandler<T> {
     String sheetName;
     @Autowired
     private ExelFileReader exelFileReader;
-
 
     @Autowired
     private Logger logger;
