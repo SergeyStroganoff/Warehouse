@@ -3,13 +3,38 @@ package com.stroganov.warehouse.utils.verifier;
 import com.stroganov.warehouse.exception.DataVerificationException;
 import org.slf4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface DataVerifier {
-    boolean dataVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException;
 
     public static final String ARTICLE = "Article";
+
+    boolean dataVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException;
+
+    static boolean commonDataVerify(Logger logger, Map<Integer, List<String>> exelRowMap, RowChecker rowChecker, int rowLength) throws DataVerificationException {
+        DataVerifier.notNullOrEmptyCheck(exelRowMap, logger);
+        Map<String, DataVerificationTypeError> verificationErrors = new HashMap<>();
+        int rowNumber = 0;
+        for (Map.Entry<Integer, List<String>> entry : exelRowMap.entrySet()) {
+            rowNumber++;
+            List<String> cellValueList = entry.getValue();
+            if (cellValueList.size() != rowLength) {
+                StringBuilder errorMessage = new StringBuilder();
+                errorMessage.append("Parameters count incorrect, check row: ").append(entry.getKey());
+                logger.debug(errorMessage.toString());
+                throw new DataVerificationException(errorMessage.toString());
+            }
+            String firstCell = cellValueList.get(0);
+            if (ARTICLE.equalsIgnoreCase(firstCell)) {
+                continue;
+            }
+            verificationErrors = rowChecker.checkRow(cellValueList,rowNumber);
+        }
+        return DataVerifier.CheckParsingErrors(verificationErrors, logger);
+    }
+
 
     static <K, V> boolean notNullOrEmptyCheck(Map<K, V> exelRowMap, Logger logger) throws DataVerificationException {
         if (exelRowMap == null || exelRowMap.isEmpty()) {
@@ -20,18 +45,10 @@ public interface DataVerifier {
         return Boolean.TRUE;
     }
 
-    static boolean CheckParsingErrors(List<String> cellSizeErrorList, List<String> cellFormatErrorList, Logger logger) throws DataVerificationException {
-        if (!cellSizeErrorList.isEmpty()) {
+    static boolean CheckParsingErrors(Map<String, DataVerificationTypeError> errorMap, Logger logger) throws DataVerificationException {
+        if (!errorMap.isEmpty()) {
             StringBuilder errorMessage = new StringBuilder();
-            errorMessage.append("Parameter sizes  incorrect, check rows: ");
-            cellSizeErrorList.forEach(s -> errorMessage.append(s).append(","));
-            logger.debug(errorMessage.toString());
-            throw new DataVerificationException(errorMessage.toString());
-        }
-        if (!cellFormatErrorList.isEmpty()) {
-            StringBuilder errorMessage = new StringBuilder();
-            errorMessage.append("Format incorrect, check rows: ");
-            cellFormatErrorList.forEach(s -> errorMessage.append(s).append(","));
+            errorMap.forEach((k, v) -> errorMessage.append(v.getMessage()).append(k).append("\n"));
             logger.debug(errorMessage.toString());
             throw new DataVerificationException(errorMessage.toString());
         }

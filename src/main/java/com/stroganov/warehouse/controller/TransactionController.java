@@ -28,6 +28,8 @@ import static com.stroganov.warehouse.controller.ProductLineController.SAVING_ER
 @Controller
 public class TransactionController {
     public static final String UPLOAD_DELIVERY_FORM_ADDRESS = "upload-transaction-form";
+    public static final String PARSER_OPTIONS = "parserOptions";
+    public static final String OPERATION_TYPE = "operationType";
     @Autowired
     private Logger logger;
     @Autowired
@@ -40,15 +42,15 @@ public class TransactionController {
 
     @GetMapping("/upload/delivery-form")
     public String showDeliveryForm(Model model) {
-        model.addAttribute("parserOptions", FileTypeOptions.values());
-        model.addAttribute("operationType", TransactionType.SUPPLY.toString());
+        model.addAttribute(PARSER_OPTIONS, FileTypeOptions.values());
+        model.addAttribute(OPERATION_TYPE, TransactionType.SUPPLY.toString());
         return UPLOAD_DELIVERY_FORM_ADDRESS;
     }
 
     @GetMapping("/upload/consumption-form")
     public String showConsumptionForm(Model model) {
-        model.addAttribute("parserOptions", FileTypeOptions.values());
-        model.addAttribute("operationType", TransactionType.CONSUMPTION.toString());
+        model.addAttribute(PARSER_OPTIONS, FileTypeOptions.values());
+        model.addAttribute(OPERATION_TYPE, TransactionType.CONSUMPTION.toString());
         return UPLOAD_DELIVERY_FORM_ADDRESS;
     }
 
@@ -62,8 +64,8 @@ public class TransactionController {
         Notification notification;
         Set<ExelTransactionRowDTO> exelTransactionRowSet;
         TransactionType type = TransactionType.valueOf(transactionType);
-        model.addAttribute("parserOptions", FileTypeOptions.values());
-        model.addAttribute("operationType", type.toString());
+        model.addAttribute(PARSER_OPTIONS, FileTypeOptions.values());
+        model.addAttribute(OPERATION_TYPE, type.toString());
         try {
             fileUploadedPath = storageService.store(file);
             exelTransactionRowSet = parserManager.parseFile(fileUploadedPath, FileTypeOptions.valueOf(selectedOption));

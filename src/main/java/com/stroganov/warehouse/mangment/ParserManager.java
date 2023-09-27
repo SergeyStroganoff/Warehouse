@@ -28,7 +28,11 @@ public class ParserManager {
     private DataStorageHandler<ExelTransactionRowDTO> dataStorageHandler;
 
     public Set<ExelTransactionRowDTO> parseFile(Path fileUploadedPath, FileTypeOptions fileTypeOptions) throws FileParsingException {
-       //TODO - improove nandling options;
-        return dataStorageHandler.parseExelFile(fileUploadedPath, exelTransactionRowDTODataParser, transactionListVerifierImpl);
+        //TODO - improove nandling options;
+        return switch (fileTypeOptions) {
+            case BASIC_TEMPLATE ->
+                    dataStorageHandler.parseExelFile(fileUploadedPath, exelTransactionRowDTODataParser, transactionListVerifierImpl);
+            case NORDIC_TEMPLATE -> null;
+        };
     }
 }
