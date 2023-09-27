@@ -64,7 +64,7 @@ class UserServiceImlUnitTest {
         when(modelMapper.map(user, UserDTO.class)).thenReturn(userDTO);
 
         // when - Perform the method call
-        Optional<UserDTO> foundUser = userService.findUserByName("test");
+        Optional<UserDTO> foundUser = userService.getUserDTOByName("test");
 
         // Verify the result
         assertThat(foundUser).isPresent();

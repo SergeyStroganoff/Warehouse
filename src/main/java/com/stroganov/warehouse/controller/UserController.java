@@ -59,7 +59,7 @@ public class UserController {
         if (bindingResult.hasErrors()) { // validation
             return REGISTRATION;
         }
-        if (userService.findUserByName(userRegistrationDTO.getUserName()).isPresent()) {
+        if (userService.getUserDTOByName(userRegistrationDTO.getUserName()).isPresent()) {
             bindingResult.addError(new ObjectError(GLOBAL, USER_WITH_SUCH_NAME_IS_PRESENT_MESSAGE));
             return REGISTRATION;
         }
@@ -88,7 +88,7 @@ public class UserController {
         if (bindingResult.hasErrors()) { // validation
             return NEW_USER_FORM;
         }
-        if (userService.findUserByName(userDTO.getUserName()).isPresent()) {
+        if (userService.getUserDTOByName(userDTO.getUserName()).isPresent()) {
             bindingResult.addError(new ObjectError(GLOBAL, USER_WITH_SUCH_NAME_IS_PRESENT_MESSAGE));
             return NEW_USER_FORM;
         }

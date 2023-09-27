@@ -21,4 +21,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             @Param("modelArticle") String modelArticle,
             @Param("producerName") String producerName,
             @Param("styleArticle") String styleArticle);
+
+    boolean existsByModel_ArticleAndProducer_NameAndItemStyle_StyleArticle(String article, String name, String styleArticle);
 }

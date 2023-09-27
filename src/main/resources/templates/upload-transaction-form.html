@@ -15,9 +15,13 @@
     <div class="row">
         <div class="col-md-8 mx-auto">
             <div class="card">
-                <h5 class="card-title mx-auto">Drag & Drop File Upload</h5>
+                <h5 class="card-title mx-auto">
+                    <span th:if="${operationType == 'SUPPLY'}">Drag & Drop Delivery File Upload</span>
+                    <span th:unless="${operationType == 'SUPPLY'}">Drag & Drop Consumption File Upload</span>
+                </h5>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" th:action="@{/upload/delivery}">
+                    <form method="POST" enctype="multipart/form-data" th:action="@{/upload/transaction}">
+                        <input type="text" th:value="${operationType}" name="transactionType" hidden>
                         <div class="form-group">
                             <div id="drop-area" class="dropzone">
                                 <p class="text-center">Drag & Drop a file here</p>
@@ -36,7 +40,7 @@
                                 <label for="selectOption">Select a Template Option:</label>
                                 <select class="form-control" id="selectOption"
                                         name="selectedOption">
-                                    <option th:each="option:${deliveryParserOptions}" th:text="${option}"
+                                    <option th:each="option:${parserOptions}" th:text="${option}"
                                             th:value="${option}">None
                                     </option>
                                 </select>

@@ -29,10 +29,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public void stockInitialisation(Iterable<Item> item, int startAmount) {
         Assert.notNull(item, "Error, item list can't be NULL");
-        List<Warehouse> warehouses = warehouseService.getUserWarehouseList();
-        Assert.notEmpty(warehouses, "Warehouse list can't be empty");
-        Warehouse defaultWarehouse = warehouses.get(0);
-        Optional<Warehouse> warehouseOptional = warehouseService.findById(defaultWarehouse.getId());
+        Optional<Warehouse> warehouseOptional = warehouseService.getCurrentUserWarehouse();
         if (warehouseOptional.isPresent()) {
             List<Stock> stockList = new ArrayList<>();
             for (Item currentItem : item) {
@@ -41,14 +38,14 @@ public class StockServiceImpl implements StockService {
             }
             stockRepository.saveAll(stockList);
         } else {
-            logger.error(String.format("Warehouse was not found: %s", defaultWarehouse));
+            logger.error("Warehouse was not found");
             throw new RuntimeException("Warehouse was not found");
         }
     }
 
     @Override
-    public Optional<Stock> getCurrentStockByItemParams(String modelArticle, String manufactureName, String styleArticle) {
-        return stockRepository.findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticle(modelArticle, manufactureName, styleArticle);
+    public Optional<Stock> getCurrentStockByItemParamsAndWarehouseId(String modelArticle, String manufactureName, String styleArticle, int warehouseId) {
+        return stockRepository.findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticleAndWarehouse_Id(modelArticle, manufactureName, styleArticle,warehouseId);
     }
 
     @Override
@@ -56,6 +53,12 @@ public class StockServiceImpl implements StockService {
             String modelArticle, String producerName, String styleArticle) {
         return Optional.ofNullable(stockRepository.findStockIdByModelArticleProducerNameStyleArticle(
                 modelArticle, producerName, styleArticle));
+    }
+
+    @Override
+    public boolean isStockExist(String modelArticle, String producerName, String styleArticle, int warehouseId) {
+        return stockRepository.existsByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticleAndWarehouseId(
+                modelArticle, producerName, styleArticle, warehouseId);
     }
 
     @Override

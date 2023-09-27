@@ -20,9 +20,15 @@ public class WarehouseServiceImpl implements WarehouseService {
     private WarehouseRepository warehouseRepository;
 
     @Override
-    public List<Warehouse> getUserWarehouseList() {
+    public List<Warehouse> getCurrentUserWarehouseList() {
         User user = (User) userService.getAuthenticatedUser();
         return user.getWarehouseList();
+    }
+
+    @Override
+    public Optional<Warehouse> getCurrentUserWarehouse() {
+        Warehouse defaultWarehouse = getCurrentUserWarehouseList().get(0);
+        return findById(defaultWarehouse.getId());
     }
 
     @Override

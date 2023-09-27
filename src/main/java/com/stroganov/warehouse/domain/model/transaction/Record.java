@@ -16,7 +16,7 @@ public class Record {
     @Id
     @Column(name = "record_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)

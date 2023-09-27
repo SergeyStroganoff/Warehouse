@@ -16,6 +16,16 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     Optional<Stock> findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticle(String article, String name, String styleArticle);
 
     @Query("""
+            select s from Stock s
+            where s.item.model.article = ?1 and s.item.producer.name = ?2 and s.item.itemStyle.styleArticle = ?3 and s.warehouse.id = ?4""")
+    Optional<Stock> findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticleAndWarehouse_Id(String article, String name, String styleArticle, int id);
+
+    @Query("""
+            select (count(s) > 0) from Stock s
+            where s.item.model.article = ?1 and s.item.producer.name = ?2 and s.item.itemStyle.styleArticle = ?3 and s.warehouse.id = ?4""")
+    boolean existsByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticleAndWarehouseId(String article, String name, String styleArticle, int warehouseId);
+
+    @Query("""
             select s.id from Stock s
             INNER JOIN s.item i
             INNER JOIN i.model m

@@ -1,20 +1,17 @@
 package com.stroganov.warehouse.controller;
 
-import com.stroganov.warehouse.domain.dto.transaction.DeliveryParserOptions;
 import com.stroganov.warehouse.domain.dto.transaction.ExelTransactionRowDTO;
+import com.stroganov.warehouse.domain.dto.transaction.FileTypeOptions;
 import com.stroganov.warehouse.domain.model.service.Notification;
 import com.stroganov.warehouse.domain.model.transaction.TransactionType;
 import com.stroganov.warehouse.exception.FileParsingException;
 import com.stroganov.warehouse.exception.StorageException;
 import com.stroganov.warehouse.exception.TransactionServiceException;
-import com.stroganov.warehouse.service.DataStorageHandler;
+import com.stroganov.warehouse.mangment.ParserManager;
 import com.stroganov.warehouse.service.StorageService;
 import com.stroganov.warehouse.service.transaction.TransactionService;
-import com.stroganov.warehouse.utils.parser.DataParser;
-import com.stroganov.warehouse.utils.verifier.DataVerifier;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,43 +27,47 @@ import static com.stroganov.warehouse.controller.ProductLineController.SAVING_ER
 
 @Controller
 public class TransactionController {
-    public static final String UPLOAD_DELIVERY_FORM_ADDRESS = "upload-delivery-form";
+    public static final String UPLOAD_DELIVERY_FORM_ADDRESS = "upload-transaction-form";
     @Autowired
     private Logger logger;
-
     @Autowired
     private StorageService storageService;
-
-    @Autowired
-    @Qualifier("transactionListVerifierImpl")
-    private DataVerifier transactionListVerifierImpl;
-
-    @Autowired
-    @Qualifier("transactionParserImpl")
-    private DataParser<ExelTransactionRowDTO> exelTransactionRowDTODataParser;
-
-    @Autowired
-    private DataStorageHandler<ExelTransactionRowDTO> dataStorageHandler;
-
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private ParserManager parserManager;
 
     @GetMapping("/upload/delivery-form")
-    public String showRegisterForm(Model model) {
-        model.addAttribute("deliveryParserOptions", DeliveryParserOptions.values());
+    public String showDeliveryForm(Model model) {
+        model.addAttribute("parserOptions", FileTypeOptions.values());
+        model.addAttribute("operationType", TransactionType.SUPPLY.toString());
         return UPLOAD_DELIVERY_FORM_ADDRESS;
     }
 
-    @PostMapping("/upload/delivery")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("selectedOption") String selectedOption, Model model) {
+    @GetMapping("/upload/consumption-form")
+    public String showConsumptionForm(Model model) {
+        model.addAttribute("parserOptions", FileTypeOptions.values());
+        model.addAttribute("operationType", TransactionType.CONSUMPTION.toString());
+        return UPLOAD_DELIVERY_FORM_ADDRESS;
+    }
+
+    @PostMapping("/upload/transaction")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   @RequestParam("selectedOption") String selectedOption,
+                                   @RequestParam("transactionType") String transactionType,
+                                   Model model) {
         Path fileUploadedPath = null;
+        int recordedRows = 0;
         Notification notification;
         Set<ExelTransactionRowDTO> exelTransactionRowSet;
+        TransactionType type = TransactionType.valueOf(transactionType);
+        model.addAttribute("parserOptions", FileTypeOptions.values());
+        model.addAttribute("operationType", type.toString());
         try {
             fileUploadedPath = storageService.store(file);
-            exelTransactionRowSet = dataStorageHandler.parseExelFile(fileUploadedPath, exelTransactionRowDTODataParser, transactionListVerifierImpl);
-            transactionService.doTransaction(exelTransactionRowSet, TransactionType.SUPPLY); // todo
+            exelTransactionRowSet = parserManager.parseFile(fileUploadedPath, FileTypeOptions.valueOf(selectedOption));
+            recordedRows = transactionService.doTransaction(exelTransactionRowSet, type); // todo
         } catch (StorageException e) {
             logger.error("Error during saving file: " + file.getOriginalFilename(), e);
             notification = new Notification("Error", SAVING_ERROR_MESSAGE + e.getMessage());
@@ -83,7 +84,8 @@ public class TransactionController {
             model.addAttribute(NOTIFICATION, notification);
             return UPLOAD_DELIVERY_FORM_ADDRESS;
         }
-        notification = new Notification("Success", "You successfully uploaded " + file.getOriginalFilename() + "!");
+        String message = String.format("You successfully uploaded %s file. %n Recorded: %d rows", file.getOriginalFilename(), recordedRows);
+        notification = new Notification("Success", message);
         model.addAttribute(NOTIFICATION, notification);
         return UPLOAD_DELIVERY_FORM_ADDRESS;
     }

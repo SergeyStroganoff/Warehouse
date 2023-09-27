@@ -3,7 +3,6 @@ package com.stroganov.warehouse.service.item;
 import com.stroganov.warehouse.domain.model.item.*;
 import com.stroganov.warehouse.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +13,6 @@ import java.util.*;
 @Transactional
 @RequiredArgsConstructor
 public class ItemServiceIml implements ItemService {
-
-    @Autowired
-    private Logger logger;
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
@@ -53,7 +49,7 @@ public class ItemServiceIml implements ItemService {
 
     @Override
     public List<Item> saveAllUnique(Set<Item> itemSet) {
-        removeItemsIfPresentInDB_V2(itemSet);
+        removeItemsIfPresentInDB(itemSet);
         if (itemSet.isEmpty()) {
             return Collections.emptyList();
         }
@@ -92,16 +88,26 @@ public class ItemServiceIml implements ItemService {
         return itemList;
     }
 
+    @Override
+    public Optional<Item> findItemByModelNameAndStyleArticle(String article, String producerName, String styleArticle) {
+        return itemRepository.findByModel_ArticleAndProducer_NameAndItemStyle_StyleArticle(
+                article, producerName, styleArticle);
+    }
+
+    @Override
+    public Optional<Integer> findItemIdByModelNameAndStyleArticle(String article, String producerName, String styleArticle) {
+        return Optional.ofNullable(itemRepository.findItemIdsByModelNameAndStyleArticle(article, producerName, styleArticle));
+    }
+
     private void removeItemsIfPresentInDB(Set<Item> itemSet) {
         Iterator<Item> itemIterator = itemSet.iterator();
         while (itemIterator.hasNext()) {
             Item currentItem = itemIterator.next();
-            Optional<Item> currentOptionalItem = getItemByArticleManufactureNameStyle(  //getItemByArticleManufactureNameStyle
+            boolean isItemPresent = itemRepository.existsByModel_ArticleAndProducer_NameAndItemStyle_StyleArticle(
                     currentItem.getModel().getArticle(),
                     currentItem.getProducer().getName(),
-                    currentItem.getItemStyle().getStyleArticle()
-            );
-            if (currentOptionalItem.isPresent()) {
+                    currentItem.getItemStyle().getStyleArticle());
+            if (isItemPresent) {
                 itemIterator.remove();
             }
         }

@@ -7,7 +7,6 @@ import com.stroganov.warehouse.domain.model.user.User;
 import com.stroganov.warehouse.exception.RepositoryTransactionException;
 import com.stroganov.warehouse.exception.UserNotExistException;
 import com.stroganov.warehouse.repository.UserRepository;
-import com.stroganov.warehouse.service.user.UserService;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.PackagePrivate;
@@ -111,13 +110,18 @@ public class UserServiceIml implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<UserDTO> findUserByName(String userName) {
+    public Optional<UserDTO> getUserDTOByName(String userName) {
         Optional<User> userOptional = userRepository.findUserByUserName(userName);
         if (userOptional.isEmpty()) {
             return Optional.empty();
         }
         UserDTO userDTO = modelMapper.map(userOptional.get(), UserDTO.class);
         return Optional.of(userDTO);
+    }
+
+    @Override
+    public Optional<User> findUserByName(String userName) {
+        return userRepository.findUserByUserName(userName);
     }
 
     @Override
