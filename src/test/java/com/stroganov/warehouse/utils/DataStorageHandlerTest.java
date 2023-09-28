@@ -47,7 +47,6 @@ class DataStorageHandlerTest {
         //give
         mockedMap.put(1, rightObjectList);
         //itemParser.setSheetName("List");
-
         when(exelFileReader.readExelTable(anyString(), any())).thenReturn(mockedMap);
         when(dataVerifier.dataVerify(anyMap())).thenReturn(Boolean.TRUE);
         //when

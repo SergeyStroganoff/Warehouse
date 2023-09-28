@@ -14,6 +14,7 @@ class TransactionParserImplTest {
     void parseItemTest() {
         //given
         ExelTransactionRowDTO baseExelTransactionRowDTO = new ExelTransactionRowDTO("B12", "NWS", "T100", 42);
+
         //when
         ExelTransactionRowDTO testExelTransactionRowDTO = itemDataParser.parse(rightObjectList);
         //then
