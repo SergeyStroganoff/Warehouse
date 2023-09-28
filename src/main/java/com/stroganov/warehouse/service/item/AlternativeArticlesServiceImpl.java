@@ -12,10 +12,11 @@ import java.util.Optional;
 @Service
 @Transactional
 @Setter
-public class AlternativeArticlesServiceImpl {
+public class AlternativeArticlesServiceImpl implements AlternativeArticlesService {
     @Autowired
     AlternativeArticlesRepository alternativeArticlesRepository;
 
+    @Override
     public Optional<AlternativeArticles> fiendByID(String articleString) {
         return alternativeArticlesRepository.findById(articleString);
     }

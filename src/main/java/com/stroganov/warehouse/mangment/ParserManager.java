@@ -19,20 +19,28 @@ public class ParserManager {
     @Autowired
     @Qualifier("transactionListVerifierImpl")
     private DataVerifier transactionListVerifierImpl;
-
     @Autowired
     @Qualifier("transactionParserImpl")
     private DataParser<ExelTransactionRowDTO> exelTransactionRowDTODataParser;
 
     @Autowired
+    @Qualifier("nordicTransactionListVerifierImpl")
+    private DataVerifier nordicTransactionListVerifierImpl;
+
+    @Autowired
+    @Qualifier("transactionNordicTypeParser")
+    private DataParser<ExelTransactionRowDTO> transactionNordicTypeParser;
+
+
+    @Autowired
     private DataStorageHandler<ExelTransactionRowDTO> dataStorageHandler;
 
     public Set<ExelTransactionRowDTO> parseFile(Path fileUploadedPath, FileTypeOptions fileTypeOptions) throws FileParsingException {
-        //TODO - improove nandling options;
         return switch (fileTypeOptions) {
             case BASIC_TEMPLATE ->
                     dataStorageHandler.parseExelFile(fileUploadedPath, exelTransactionRowDTODataParser, transactionListVerifierImpl);
-            case NORDIC_TEMPLATE -> null;
+            case NORDIC_TEMPLATE ->
+                    dataStorageHandler.parseExelFile(fileUploadedPath, transactionNordicTypeParser, nordicTransactionListVerifierImpl);
         };
     }
 }

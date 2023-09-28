@@ -24,9 +24,11 @@ public class NordicTransactionListVerifierImpl implements DataVerifier {
                     x.get(1).length() > 7) {
                 typeErrorHashMap.put(String.valueOf(r), DataVerificationTypeError.CELL_SIZE_ERROR);
             }
-            if (!x.get(1).matches("\\d{1,7}")) {
+            if (!x.get(1).matches("\\d{1,7}") || !x.get(0).matches("^(NWS|NGS|NES|NCS) .{1,12}$")) {
                 typeErrorHashMap.put(String.valueOf(r), DataVerificationTypeError.CELL_FORMAT_ERROR);
             }
+
+
             return typeErrorHashMap;
         };
         return DataVerifier.commonDataVerify(logger, exelRowMap, rowChecker, 2);

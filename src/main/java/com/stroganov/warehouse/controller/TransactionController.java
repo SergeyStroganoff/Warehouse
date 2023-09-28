@@ -69,7 +69,7 @@ public class TransactionController {
         try {
             fileUploadedPath = storageService.store(file);
             exelTransactionRowSet = parserManager.parseFile(fileUploadedPath, FileTypeOptions.valueOf(selectedOption));
-            recordedRows = transactionService.doTransaction(exelTransactionRowSet, type); // todo
+            recordedRows = transactionService.doTransaction(exelTransactionRowSet, type);
         } catch (StorageException e) {
             logger.error("Error during saving file: " + file.getOriginalFilename(), e);
             notification = new Notification("Error", SAVING_ERROR_MESSAGE + e.getMessage());
