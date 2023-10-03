@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ManufactureRepository extends JpaRepository<Manufacture, Integer> {
     Optional<Manufacture> findByNameAndDescription(String name, String description);
+
+
 }

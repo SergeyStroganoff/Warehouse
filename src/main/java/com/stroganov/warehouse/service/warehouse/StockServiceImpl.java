@@ -6,6 +6,8 @@ import com.stroganov.warehouse.domain.model.warehouse.Warehouse;
 import com.stroganov.warehouse.repository.StockRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -65,4 +67,15 @@ public class StockServiceImpl implements StockService {
     public void saveAll(List<Stock> stockList) {
         stockRepository.saveAll(stockList);
     }
+
+    @Override
+    public Page<Stock> getPageOfStock(int page, int size) {
+        return stockRepository.findAll(PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<Stock> getPageOfStockFilteredByManufactureId(Integer manufactureId, int page, int size) {
+        return stockRepository.findByItem_Producer_Id(manufactureId, PageRequest.of(page, size));
+    }
+
 }

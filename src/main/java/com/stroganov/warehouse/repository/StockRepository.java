@@ -1,6 +1,8 @@
 package com.stroganov.warehouse.repository;
 
 import com.stroganov.warehouse.domain.model.warehouse.Stock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,4 +39,6 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
             @Param("modelArticle") String modelArticle,
             @Param("producerName") String producerName,
             @Param("styleArticle") String styleArticle);
+
+    Page<Stock> findByItem_Producer_Id(int id, Pageable pageable);
 }

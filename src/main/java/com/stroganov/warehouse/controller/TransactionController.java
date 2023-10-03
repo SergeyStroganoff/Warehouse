@@ -60,7 +60,7 @@ public class TransactionController {
                                    @RequestParam("transactionType") String transactionType,
                                    Model model) {
         Path fileUploadedPath = null;
-        int recordedRows = 0;
+        int recordedRows;
         Notification notification;
         Set<ExelTransactionRowDTO> exelTransactionRowSet;
         TransactionType type = TransactionType.valueOf(transactionType);
