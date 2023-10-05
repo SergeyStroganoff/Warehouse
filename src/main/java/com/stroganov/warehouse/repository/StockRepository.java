@@ -41,4 +41,10 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
             @Param("styleArticle") String styleArticle);
 
     Page<Stock> findByItem_Producer_Id(int id, Pageable pageable);
+
+    @Query("select s from Stock s where s.amount < ?1")
+    Page<Stock> findByAmountLessThan(int amount, Pageable pageable);
+
+    @Query("select s from Stock s where s.item.producer.id = ?1 and s.amount < ?2")
+    Page<Stock> findByItem_Producer_IdAndAmountLessThan(Integer id, int amount, Pageable pageable);
 }

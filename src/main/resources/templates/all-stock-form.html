@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,13 +27,19 @@
             <div class="col-md-6 mt-3">
                 Filter by:
             </div>
-            <div class="col-md-6 mt-3">
+            <div class="col-md-8 mt-3">
                 <form th:action="@{/stock-filtered}" method="post">
                     <div class="input-group">
                         <label class="input-group-text" for="filterSelect">Producer: </label>
                         <select class="form-select" id="filterSelect" name="producer">
                             <option th:each="manufacture:${manufactureList}" th:text="${manufacture.name}"
                                     th:value="${manufacture.id}">None
+                            </option>
+                        </select>
+                        <label class="input-group-text" for="amountSelect">Amount: </label>
+                        <select class="form-select" id="amountSelect" name="amount">
+                            <option th:each="amount:${amountOptions}" th:text="${amount.value}"
+                                    th:value="${amount.key}">None
                             </option>
                         </select>
                         <button type="submit" class="btn btn-outline-secondary">Apply</button>
@@ -50,6 +57,8 @@
                     <th>Style Article</th>
                     <th>Style Name</th>
                     <th>Quantity</th>
+                    <th sec:authorize="hasRole('ADMIN')" >Total $</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -60,6 +69,7 @@
                     <td th:text="${stock.item.itemStyle.styleArticle}"></td>
                     <td th:text="${stock.item.itemStyle.styleName}"></td>
                     <td th:text="${stock.amount}"></td>
+                    <td sec:authorize="hasRole('ADMIN')" th:text="${stock.amount * stock.item.sellPrice}"></td>
                 </tr>
                 </tbody>
             </table>

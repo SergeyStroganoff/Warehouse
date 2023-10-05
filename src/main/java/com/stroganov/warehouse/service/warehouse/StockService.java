@@ -22,4 +22,8 @@ public interface StockService {
     Page<Stock> getPageOfStock(int page, int size);
 
     Page<Stock> getPageOfStockFilteredByManufactureId(Integer manufactureId, int page, int size);
+
+    Page<Stock> getPageOfStockFilteredByManufactureIdAndByAmountLess(Integer producerId, Integer amountLess, int page, int size);
+
+    Page<Stock> getPageOfStockFilteredByAmountLess(Integer amountLess, int page, int size);
 }

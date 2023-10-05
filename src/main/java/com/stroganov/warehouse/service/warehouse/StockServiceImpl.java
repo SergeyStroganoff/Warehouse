@@ -78,4 +78,13 @@ public class StockServiceImpl implements StockService {
         return stockRepository.findByItem_Producer_Id(manufactureId, PageRequest.of(page, size));
     }
 
+    @Override
+    public Page<Stock> getPageOfStockFilteredByManufactureIdAndByAmountLess(Integer producerId, Integer amountLess, int page, int size) {
+        return stockRepository.findByItem_Producer_IdAndAmountLessThan(producerId, amountLess, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<Stock> getPageOfStockFilteredByAmountLess(Integer amountLess, int page, int size) {
+        return stockRepository.findByAmountLessThan(amountLess, PageRequest.of(page, size));
+    }
 }
