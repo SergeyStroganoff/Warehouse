@@ -46,7 +46,7 @@ public class UserController {
     private Logger logger;
 
 
-    @GetMapping("/admin-registration")
+    @GetMapping("/registration")
     public String showRegisterForm(UserRegistrationDTO userRegistrationDTO, Model model) {
         model.addAttribute("availableRoles", Role.ROLE_ADMIN.toString());
         return REGISTRATION;

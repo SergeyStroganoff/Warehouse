@@ -24,7 +24,6 @@ public class WebSecurityConfig  {
 
     @Autowired
     UserDetailsService userDetailsService;
-
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
@@ -32,7 +31,7 @@ public class WebSecurityConfig  {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/hello", "/admin-registration", "/images/**", "/registration-action").permitAll()
+                        .requestMatchers("/registration", "/images/**", "/registration-action", "/", "/hello", "/error").permitAll() //
                         .requestMatchers("/main").hasAnyRole(Role.ROLE_USER.getRoleName(), Role.ROLE_ADMIN.getRoleName(), Role.ROLE_ACCOUNTANT.getRoleName(), Role.ROLE_WAREHOUSE.getRoleName())
                         .requestMatchers("/call-user-form", "/call-user-management-form", "/users-management", "/user-disable-enable/**", "/user-delete/**").hasRole(Role.ROLE_ADMIN.getRoleName())
                         .anyRequest().authenticated()

@@ -47,4 +47,6 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
 
     @Query("select s from Stock s where s.item.producer.id = ?1 and s.amount < ?2")
     Page<Stock> findByItem_Producer_IdAndAmountLessThan(Integer id, int amount, Pageable pageable);
+
+
 }
