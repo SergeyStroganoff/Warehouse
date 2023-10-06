@@ -2,8 +2,10 @@ package com.stroganov.warehouse.controller;
 
 import com.stroganov.warehouse.domain.model.item.Manufacture;
 import com.stroganov.warehouse.domain.model.warehouse.Stock;
+import com.stroganov.warehouse.domain.model.warehouse.Warehouse;
 import com.stroganov.warehouse.service.item.ManufactureService;
 import com.stroganov.warehouse.service.warehouse.StockService;
+import com.stroganov.warehouse.service.warehouse.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,9 @@ public class StockController {
     @Autowired
     private StockService stockService;
 
+    @Autowired
+    private WarehouseService warehouseService;
+
     @GetMapping("/stock")
     public String getAllStockPage(Model model,
                                   @RequestParam(required = false) Integer amountLess,
@@ -49,6 +54,7 @@ public class StockController {
 
     private String getStockPage(Model model, Integer producerId, Integer amountLess, int page, int size) {
         page = Math.max(page, 0);
+        Warehouse warehouse = warehouseService.getCurrentUserWarehouseList().get(0);
         List<Manufacture> manufactureList = manufactureService.findAllManufacture();
         manufactureList.add(new Manufacture(-1, "All", ""));
         manufactureList.sort(Comparator.comparing(Manufacture::getId));
@@ -56,15 +62,15 @@ public class StockController {
         Page<Stock> stockPage;
         if (producerId != null && producerId > -1) {
             if (amountLess != null && amountLess != 0) {
-                stockPage = stockService.getPageOfStockFilteredByManufactureIdAndByAmountLess(producerId, amountLess, page, size);
+                stockPage = stockService.getPageOfStockFilteredByManufactureIdAndByAmountLessAndWarehouseId(producerId, amountLess, page, size, warehouse.getId());
             } else {
-                stockPage = stockService.getPageOfStockFilteredByManufactureId(producerId, page, size);
+                stockPage = stockService.getPageOfStockFilteredByManufactureIdAndWarehouseId(producerId, page, size, warehouse.getId());
             }
         } else {
             if (amountLess != null && amountLess != 0) {
-                stockPage = stockService.getPageOfStockFilteredByAmountLess(amountLess, page, size);
+                stockPage = stockService.getPageOfStockFilteredByAmountLessAndWarehouseId(amountLess, page, size, warehouse.getId());
             } else {
-                stockPage = stockService.getPageOfStock(page, size);
+                stockPage = stockService.getPageOfStockByWarehouseId(page, size, warehouse.getId());
             }
         }
         model.addAttribute(manufactureList);

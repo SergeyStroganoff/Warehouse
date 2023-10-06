@@ -40,6 +40,7 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
             @Param("producerName") String producerName,
             @Param("styleArticle") String styleArticle);
 
+    ////////////
     Page<Stock> findByItem_Producer_Id(int id, Pageable pageable);
 
     @Query("select s from Stock s where s.amount < ?1")
@@ -48,5 +49,16 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     @Query("select s from Stock s where s.item.producer.id = ?1 and s.amount < ?2")
     Page<Stock> findByItem_Producer_IdAndAmountLessThan(Integer id, int amount, Pageable pageable);
 
+    //////////////////
+    @Query("select s from Stock s where s.warehouse.id = ?1")
+    Page<Stock> findByWarehouse_Id(int id, Pageable pageable);
 
+    @Query("select s from Stock s where s.item.producer.id = ?1 and s.warehouse.id = ?2")
+    Page<Stock> findByItem_Producer_IdAndWarehouse_Id(int producerId, int warehouseId, Pageable pageable);
+
+    @Query("select s from Stock s where s.item.producer.id = ?1 and s.warehouse.id = ?2 and s.amount < ?3")
+    Page<Stock> findByItem_Producer_IdAndWarehouse_IdAndAmountLessThan(int producerId, int warehouseId, int amount, Pageable pageable);
+
+    @Query("select s from Stock s where s.warehouse.id = ?1 and s.amount < ?2")
+    Page<Stock> findByWarehouse_IdAndAmountLessThan(int warehouseId, int amount, Pageable pageable);
 }

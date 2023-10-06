@@ -69,22 +69,23 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public Page<Stock> getPageOfStock(int page, int size) {
-        return stockRepository.findAll(PageRequest.of(page, size));
+    public Page<Stock> getPageOfStockByWarehouseId(int page, int size, int warehouseId) {
+        return stockRepository.findByWarehouse_Id(warehouseId, PageRequest.of(page, size));
     }
 
     @Override
-    public Page<Stock> getPageOfStockFilteredByManufactureId(Integer manufactureId, int page, int size) {
-        return stockRepository.findByItem_Producer_Id(manufactureId, PageRequest.of(page, size));
+    public Page<Stock> getPageOfStockFilteredByManufactureIdAndWarehouseId(Integer manufactureId, int page, int size, int warehouseId) {
+        return stockRepository.findByItem_Producer_IdAndWarehouse_Id(manufactureId, warehouseId, PageRequest.of(page, size));
     }
 
     @Override
-    public Page<Stock> getPageOfStockFilteredByManufactureIdAndByAmountLess(Integer producerId, Integer amountLess, int page, int size) {
-        return stockRepository.findByItem_Producer_IdAndAmountLessThan(producerId, amountLess, PageRequest.of(page, size));
+    public Page<Stock> getPageOfStockFilteredByManufactureIdAndByAmountLessAndWarehouseId(Integer producerId, Integer amountLess, int page, int size, int warehouseId) {
+        return stockRepository.findByItem_Producer_IdAndWarehouse_IdAndAmountLessThan(producerId, warehouseId, amountLess, PageRequest.of(page, size));
     }
 
     @Override
-    public Page<Stock> getPageOfStockFilteredByAmountLess(Integer amountLess, int page, int size) {
-        return stockRepository.findByAmountLessThan(amountLess, PageRequest.of(page, size));
+    public Page<Stock> getPageOfStockFilteredByAmountLessAndWarehouseId(Integer amountLess, int page, int size, int warehouseId) {
+        return stockRepository.findByWarehouse_IdAndAmountLessThan(warehouseId, amountLess, PageRequest.of(page, size));
     }
 }
+

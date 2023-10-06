@@ -19,11 +19,11 @@ public interface StockService {
 
     void saveAll(List<Stock> stockList);
 
-    Page<Stock> getPageOfStock(int page, int size);
+    Page<Stock> getPageOfStockByWarehouseId(int page, int size, int warehouseId);
 
-    Page<Stock> getPageOfStockFilteredByManufactureId(Integer manufactureId, int page, int size);
+    Page<Stock> getPageOfStockFilteredByManufactureIdAndWarehouseId(Integer manufactureId, int page, int size, int warehouseId);
 
-    Page<Stock> getPageOfStockFilteredByManufactureIdAndByAmountLess(Integer producerId, Integer amountLess, int page, int size);
+    Page<Stock> getPageOfStockFilteredByManufactureIdAndByAmountLessAndWarehouseId(Integer producerId, Integer amountLess, int page, int size, int warehouseId);
 
-    Page<Stock> getPageOfStockFilteredByAmountLess(Integer amountLess, int page, int size);
+    Page<Stock> getPageOfStockFilteredByAmountLessAndWarehouseId(Integer amountLess, int page, int size, int warehouseId);
 }
