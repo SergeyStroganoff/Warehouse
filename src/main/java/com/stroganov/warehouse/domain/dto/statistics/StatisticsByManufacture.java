@@ -8,9 +8,9 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 public class StatisticsByManufacture {
-    private String manufactureName;
-    private String manufactureDescription;
-    private Double totalCostGoodsInStock;
-    private Double totalSellGoodsInStock;
-    private int totalItemsAmount;
+    String manufactureName;
+    String manufactureDescription;
+    double totalCostGoodsInStock;
+    double totalSellGoodsInStock;
+    int totalItemsAmount;
 }

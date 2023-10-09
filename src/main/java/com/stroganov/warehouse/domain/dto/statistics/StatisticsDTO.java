@@ -11,8 +11,10 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 public class StatisticsDTO {
-    private Double totalCostGoodsInStock;
-    private Double totalSellGoodsInStock;
-    private int totalItemsAmount;
+    private double totalCostGoodsInStock;
+    private double totalSellGoodsInStock;
+    private long totalStockAmount;
+    private long totalStockWithZeroAmount;
+    private long totalStockWithAmountLessThenFive;
     private List<StatisticsByManufacture> statisticsByManufactures = new ArrayList<>();
 }
