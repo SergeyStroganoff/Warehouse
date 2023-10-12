@@ -32,8 +32,8 @@ public class WebSecurityConfig  {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/registration", "/images/**", "/registration-action", "/", "/hello", "/error").permitAll() //
-                        .requestMatchers("/main").hasAnyRole(Role.ROLE_USER.getRoleName(), Role.ROLE_ADMIN.getRoleName(), Role.ROLE_ACCOUNTANT.getRoleName(), Role.ROLE_WAREHOUSE.getRoleName())
-                        .requestMatchers("/call-user-form", "/call-user-management-form", "/users-management", "/user-disable-enable/**", "/user-delete/**").hasRole(Role.ROLE_ADMIN.getRoleName())
+                        .requestMatchers("/main/**").hasAnyRole(Role.ROLE_USER.getRoleName(), Role.ROLE_ADMIN.getRoleName(), Role.ROLE_ACCOUNTANT.getRoleName(), Role.ROLE_WAREHOUSE.getRoleName())
+                        .requestMatchers("/call-user-form", "/call-user-management-form", "/users-management", "/user-disable-enable/**", "/user-delete/**","/statistics-form","/stat").hasRole(Role.ROLE_ADMIN.getRoleName())
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
