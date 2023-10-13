@@ -147,34 +147,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 	</build>
-	<profiles>
-		<profile>
-			<id>production</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<spring.profile.active>production</spring.profile.active>
-			</properties>
-		</profile>
-		<profile>
-			<id>dev</id>
-			<properties>
-				<spring.profile.active>dev</spring.profile.active>
-			</properties>
-		</profile>
-		<profile>
-			<id>no-tests</id>
-			<properties>
-				<maven.test.skip>true</maven.test.skip>
-			</properties>
-		</profile>
-	</profiles>
 </project>
