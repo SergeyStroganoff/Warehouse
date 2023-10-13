@@ -36,6 +36,6 @@ public class StatisticsController {
         statisticsDTO.setTotalStockWithZeroAmount(amountOfStockWithZeroStock);
         statisticsDTO.setTotalStockWithAmountLessThenFive(amountOfStockWithStockLessThanFive);
         model.addAttribute("statistics", statisticsDTO);
-        return "/stat";
+        return "stat";
     }
 }

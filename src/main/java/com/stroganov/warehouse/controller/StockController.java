@@ -23,7 +23,7 @@ import java.util.TreeMap;
 @Controller
 public class StockController {
 
-    static final String STOCK_PAGE = "/all-stock-form";
+    static final String STOCK_PAGE = "all-stock-form";
 
     @Autowired
     private ManufactureService manufactureService;
