@@ -1,0 +1,67 @@
+spring.profiles.active=dev
+spring.datasource.driver-class-name=software.aws.rds.jdbc.mysql.Driver
+# Native driver is: com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql:aws://mysqldatabase.cdzq6sienzuf.us-east-2.rds.amazonaws.com:3306/*****
+spring.datasource.username=***
+spring.datasource.password=***
+spring.jpa.hibernate.ddl-auto=create
+## create-drop//create//update//validate//none
+spring.jpa.properties.javax.persistence.schema-generation.scripts.action=create
+spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=create.sql
+spring.jpa.properties.javax.persistence.schema-generation.scripts.create-source=metadata
+# The SQL dialect makes Hibernate generate better SQL for the chosen database
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+#org.hibernate.dialect.MySQL8Dialect
+#org.hibernate.dialect.MySQL57Dialect
+## To change  naming Strategy spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.generate_statistics=true
+spring.jpa.properties.hibernate.jdbc.batch_size=50
+spring.jpa.properties.hibernate.jdbc.fetch_size=50
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true
+spring.jpa.properties.hibernate.batch_versioned_data=true
+## cash settings  org.hibernate.cache.jcache.JCacheRegionFactory  org.ehcache.jsr107.EhcacheCachingProvider
+spring.jpa.properties.javax.persistence.sharedCache.mode=ALL
+spring.jpa.properties.jakarta.persistence.sharedCache.mode=ALL
+spring.jpa.properties.hibernate.cache.region.factory_class=org.hibernate.cache.jcache.JCacheRegionFactory
+spring.jpa.properties.hibernate.cache.use_second_level_cache=true
+spring.jpa.properties.hibernate.cache.use_query_cache=true
+spring.cache.jcache.config=classpath:ehcache.xml
+## Flyway Properties
+spring.flyway.enabled=true
+spring.flyway.baseline-on-migrate=true
+##spring.flyway.url=jdbc:mysql:aws://mysqldatabase.cdzq6sienzuf.us-east-2.rds.amazonaws.com:3306/******************
+##spring.flyway.user=*****
+##spring.flyway.password=*****
+spring.flyway.locations=classpath:db/migration/{vendor}
+spring.flyway.sql-migration-prefix=v
+spring.flyway.table=schema_version
+logging.level.org.flywaydb=DEBUG
+logging.level.org.springframework.jdbc=DEBUG
+## Logging Properties
+logging.file.name=log.log
+logging.file.path=/log
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+logging.level.org.springframework=ERROR
+#Application properties
+server.error.path=/error
+server.error.whitelabel.enabled=true
+server.port=5000
+app.data.initialisation=false
+spring.servlet.multipart.max-file-size=5120KB
+spring.servlet.multipart.max-request-size=5120KB
+parser.settings.sheetName=List
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.enabled=true
+server.servlet.encoding.force=true
+
+###email.settings
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=your-email@example.com
+spring.mail.password=your-email-password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true

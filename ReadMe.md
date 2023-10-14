@@ -1,4 +1,4 @@
-# RESTful API that allows you to manage warehouses
+# Spring Boot MVC App that allows you to manage warehouses.
 This project built using **Java** and the following tools:
 - [Spring Boot](https://spring.io/projects/spring-boot) as server side framework
 - [Maven](https://maven.apache.org/) as build automation tool
@@ -12,9 +12,8 @@ This project built using **Java** and the following tools:
 
 ### Model
 
-Domain model is organized under the **model** package and it consists of entity classes. Entities use various annotations that describe the
+Domain model is organized under the **model** package, and it consists of entity classes. Entities use various annotations that describe the
 relationships between each other. All these annotations are used by JPA in order to map entities to database tables.
-
 
 ### DTO
 
@@ -57,7 +56,8 @@ In case you want to use a different database name, follow the next steps:
     CREATE DATABASE DB_NAME;
     ```
  - Open ```src/main/resources/application.properties``` file
- - Change ```db.name``` property to match your preferred database name DB_NAME
+ - Change ```spring.datasource.driver-class-name``` property to mach your driver
+ - Change ```spring.datasource.url``` property to match your preferred database name URL
 
 #### 2. Modify MySQL username and password
 
@@ -81,23 +81,21 @@ Each of these commands will create an executable ```.jar``` file at ```target```
 
 After packaging the application into an executable ```.jar``` file, you can start the server running the following command using any terminal in the project directory:
 ```
-java -jar target/warehouse-0.0.1.jar
+java -jar target/warehouse-0.0.1-SNAPSHOT.jar
 ```
 Alternatively, you can start the server without packaging, by running the following command:
 ```
 ./mvnw spring-boot:run
 ```
-The server will start running at http://localhost:8080.
-
+The server will start running at http://localhost:5000.
 
 # After running
 
 Every time the server is running, it triggers the flyway migration tool to look for possible schema changes. The first time, flyway will create a table called
 ```schema_version```, in order to write down all the scripts have already run, in a versioning way. Additionally, it will run all the available scripts at
-```src/main/resources/db/mysql/``` directory.  
+```src/main/resources/db/migration/``` directory.  
 
 After the first run, flyway will detect and run only the new scripts.
-
 
 # API Documentation
 
