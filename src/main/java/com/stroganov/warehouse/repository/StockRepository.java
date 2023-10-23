@@ -42,14 +42,6 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
             @Param("producerName") String producerName,
             @Param("styleArticle") String styleArticle);
 
-    ////////////
-    Page<Stock> findByItem_Producer_Id(int id, Pageable pageable);
-
-    @Query("select s from Stock s where s.amount < ?1")
-    Page<Stock> findByAmountLessThan(int amount, Pageable pageable);
-
-    @Query("select s from Stock s where s.item.producer.id = ?1 and s.amount < ?2")
-    Page<Stock> findByItem_Producer_IdAndAmountLessThan(Integer id, int amount, Pageable pageable);
 
     @Query("select s from Stock s where s.warehouse.id = ?1")
     Page<Stock> findByWarehouse_Id(int id, Pageable pageable);
@@ -82,7 +74,7 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
 
     @Query("""
             SELECT s.item.producer.name as manufactureName, s.item.producer.description as manufactureDescription,
-            SUM(s.item.costPrice) as totalCostGoodsInStock, SUM(s.item.sellPrice) as totalSellGoodsInStock,
+            SUM(s.item.costPrice*s.amount) as totalCostGoodsInStock, SUM(s.item.sellPrice*s.amount) as totalSellGoodsInStock,
             COUNT (s.item) as totalItemsAmount
             FROM Stock s where s.warehouse.id = ?1 GROUP BY s.item.producer.name, s.item.producer.description
             """)
