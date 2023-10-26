@@ -9,6 +9,8 @@ import java.nio.file.Path;
 public interface StorageService {
     Path store(MultipartFile file) throws StorageException;
 
+    void delete(Path file) throws StorageException;
+
     Path load(String filename);
 
     Resource loadAsResource(String filename) throws StorageException;

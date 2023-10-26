@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum ArticlePrefixType {
     NWS("NCK", "101 matt"),
     NES("NCK", "150 matt"),
-    NCS("NCK", "143"),
+    NCS("NCK", "Color 143"),
     NGS("NCK", "120 matt");
     private final String producerName;
     private final String style;

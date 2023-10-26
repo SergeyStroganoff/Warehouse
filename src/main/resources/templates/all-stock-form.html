@@ -69,7 +69,8 @@
                     <td th:text="${stock.item.itemStyle.styleArticle}"></td>
                     <td th:text="${stock.item.itemStyle.styleName}"></td>
                     <td th:text="${stock.amount}"></td>
-                    <td sec:authorize="hasRole('ADMIN')" th:text="${stock.amount * stock.item.sellPrice}"></td>
+                    <td sec:authorize="hasRole('ADMIN')"
+                        th:text="'$'+${#numbers.formatCurrency(stock.amount * stock.item.sellPrice)}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -78,25 +79,25 @@
             <nav class="d-flex justify-content-center mt-3" aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item"><a class="page-link"
-                                             th:href="@{/stock(page=${stocks.number} - 1,size=${stocks.size},producerId=${producer})}">Previous</a>
+                                             th:href="@{/stock(page=${stocks.number} - 1,size=${stocks.size},producerId=${producer},amountLess=${amount})}">Previous</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                                             th:href="@{/stock(page=0,size=${stocks.size},producerId=${producer})}">1</a>
+                                             th:href="@{/stock(page=0,size=${stocks.size},producerId=${producer},amountLess=${amount})}">1</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                                             th:href="@{/stock(page=1,size=${stocks.size},producerId=${producer})}">2</a>
+                                             th:href="@{/stock(page=1,size=${stocks.size},producerId=${producer},amountLess=${amount})}">2</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                                             th:href="@{/stock(page=2,size=${stocks.size},producerId=${producer})}">3</a>
+                                             th:href="@{/stock(page=2,size=${stocks.size},producerId=${producer},amountLess=${amount})}">3</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                                             th:href="@{/stock(page=3,size=${stocks.size},producerId=${producer})}">4</a>
+                                             th:href="@{/stock(page=3,size=${stocks.size},producerId=${producer},amountLess=${amount})}">4</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                                             th:href="@{/stock(page=4,size=${stocks.size},producerId=${producer})}">5</a>
+                                             th:href="@{/stock(page=4,size=${stocks.size},producerId=${producer},amountLess=${amount})}">5</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                                             th:href="@{/stock(page=${stocks.number} + 1,size=${stocks.size},producerId=${producer})}">Next</a>
+                                             th:href="@{/stock(page=${stocks.number} + 1,size=${stocks.size},producerId=${producer},amountLess=${amount})}">Next</a>
                     </li>
                 </ul>
             </nav>

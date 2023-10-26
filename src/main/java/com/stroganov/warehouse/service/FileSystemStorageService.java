@@ -42,6 +42,15 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public void delete(Path file) throws StorageException {
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            throw new StorageException("Failed to store file", e);
+        }
+    }
+
+    @Override
     public Path load(String filename) {
         return currentTempDir.resolve(filename);
     }

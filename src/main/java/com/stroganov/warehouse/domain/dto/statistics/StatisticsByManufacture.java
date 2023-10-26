@@ -10,7 +10,7 @@ import lombok.*;
 public class StatisticsByManufacture {
     String manufactureName;
     String manufactureDescription;
-    double totalCostGoodsInStock;
-    double totalSellGoodsInStock;
+    String totalCostGoodsInStock;
+    String totalSellGoodsInStock;
     int totalItemsAmount;
 }

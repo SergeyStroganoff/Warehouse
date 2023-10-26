@@ -11,8 +11,8 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 public class StatisticsDTO {
-    private double totalCostGoodsInStock;
-    private double totalSellGoodsInStock;
+    private String totalCostGoodsInStock;
+    private String totalSellGoodsInStock; //todo
     private long totalStockAmount;
     private long totalStockWithZeroAmount;
     private long totalStockWithAmountLessThenFive;

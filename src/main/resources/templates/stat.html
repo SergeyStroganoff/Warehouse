@@ -59,8 +59,8 @@
                             <td th:text="${statisticsByManufacture.manufactureName}"></td>
                             <td th:text="${statisticsByManufacture.manufactureDescription}"></td>
                             <td th:text="${statisticsByManufacture.totalItemsAmount}"></td>
-                            <td th:text="${statisticsByManufacture.totalCostGoodsInStock}"></td>
-                            <td th:text="${statisticsByManufacture.totalSellGoodsInStock}"></td>
+                            <td th:text="'$'+${statisticsByManufacture.totalCostGoodsInStock}"></td>
+                            <td th:text="'$'+${statisticsByManufacture.totalSellGoodsInStock}"></td>
                         </tr>
                         </tbody>
                     </table>

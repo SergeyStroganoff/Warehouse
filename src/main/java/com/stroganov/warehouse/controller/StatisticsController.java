@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Controller
@@ -21,6 +22,9 @@ public class StatisticsController {
     @Autowired
     private StatisticsService statisticsService;
 
+    @Autowired
+    private DecimalFormat decimalFormat;
+
     @GetMapping("/statistics-form")
     public String getAllStockPage(Model model) {
         Warehouse warehouse = warehouseService.getCurrentUserWarehouseList().get(0);
@@ -31,9 +35,10 @@ public class StatisticsController {
         double totalWarehouseSellPrice = statisticsService.getTotalWarehouseSellPrice(warehouse.getId());
         List<StatisticsByManufacture> statisticsByManufactureList = statisticsService.getStatisticsByProducer(warehouse.getId());
         statisticsDTO.setStatisticsByManufactures(statisticsByManufactureList);
-        statisticsDTO.setTotalCostGoodsInStock(totalWarehouseSellPrice);
+        statisticsDTO.setTotalCostGoodsInStock(decimalFormat.format(totalWarehouseSellPrice));
         statisticsDTO.setTotalStockAmount(totalAmountOfStock);
         statisticsDTO.setTotalStockWithZeroAmount(amountOfStockWithZeroStock);
+        statisticsDTO.setTotalSellGoodsInStock(String.valueOf(totalAmountOfStock - amountOfStockWithZeroStock));
         statisticsDTO.setTotalStockWithAmountLessThenFive(amountOfStockWithStockLessThanFive);
         model.addAttribute("statistics", statisticsDTO);
         return "stat";

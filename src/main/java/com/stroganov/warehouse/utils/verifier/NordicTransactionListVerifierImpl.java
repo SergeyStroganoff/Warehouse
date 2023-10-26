@@ -19,7 +19,7 @@ public class NordicTransactionListVerifierImpl implements DataVerifier {
     public boolean dataVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException {
         RowChecker rowChecker = (x, r) -> {
             Map<String, DataVerificationTypeError> typeErrorHashMap = new HashMap<>();
-            if (x.get(0).length() < 5 ||
+            if (x.get(0).length() < 2 ||
                     x.get(0).length() > 12 ||
                     x.get(1).length() > 7) {
                 typeErrorHashMap.put(String.valueOf(r), DataVerificationTypeError.CELL_SIZE_ERROR);

@@ -20,8 +20,8 @@ public class TransactionNordicTypeParser implements DataParser<ExelTransactionRo
     @Override
     public ExelTransactionRowDTO parse(List<String> objectList) {
         ExelTransactionRowDTO exelTransactionRowDTO = new ExelTransactionRowDTO();
-        String firstString = objectList.get(0);
-        String[] prefixAndArticle = firstString.split(" ");
+        String firstRow = objectList.get(0);
+        String[] prefixAndArticle = firstRow.split(" ",2);
         String prefix = prefixAndArticle[0];
         String article = prefixAndArticle[1];
         int quantity = Integer.parseInt(objectList.get(1));

@@ -6,6 +6,7 @@ import jakarta.persistence.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private StockRepository stockRepository;
+
+    @Autowired
+    DecimalFormat decimalFormat;
 
 
     @Override
@@ -44,12 +48,13 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     public List<StatisticsByManufacture> mapToStatisticsDto(List<Tuple> tuples) {
+
         return tuples.stream()
                 .map(tuple -> new StatisticsByManufacture(
                         tuple.get("manufactureName", String.class),
                         tuple.get("manufactureDescription", String.class),
-                        tuple.get("totalCostGoodsInStock", Double.class),
-                        tuple.get("totalSellGoodsInStock", Double.class),
+                        decimalFormat.format( tuple.get("totalCostGoodsInStock", Double.class)),
+                        decimalFormat.format(tuple.get("totalSellGoodsInStock", Double.class)),
                         tuple.get("totalItemsAmount", Long.class).intValue()
                 ))
                 .collect(Collectors.toList());

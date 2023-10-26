@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.text.DecimalFormat;
+
 @org.springframework.context.annotation.Configuration
 //@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
 public class MvcConfig implements WebMvcConfigurer {
@@ -19,6 +21,12 @@ public class MvcConfig implements WebMvcConfigurer {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public DecimalFormat decimalFormatPointTwoSigns() {
+        return new DecimalFormat("#.00");
+    }
+
 
     @Bean
     @Primary

@@ -39,7 +39,7 @@ public class StockController {
                                   @RequestParam(required = false) Integer amountLess,
                                   @RequestParam(required = false) Integer producerId,
                                   @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "20") int size) {
+                                  @RequestParam(defaultValue = "100") int size) {
         return getStockPage(model, producerId, amountLess, page, size);
     }
 
@@ -48,7 +48,7 @@ public class StockController {
                                    @ModelAttribute("amount") Integer amountLess,
                                    @ModelAttribute("producer") Integer producerId,
                                    @RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "20") int size) {
+                                   @RequestParam(defaultValue = "100") int size) {
         return getStockPage(model, producerId, amountLess, page, size);
     }
 
@@ -77,6 +77,7 @@ public class StockController {
         model.addAttribute("stocks", stockPage);
         model.addAttribute("producer", producerId);
         model.addAttribute("amountOptions", amountOptions);
+        model.addAttribute("amount", amountLess);
         return STOCK_PAGE;
     }
 }

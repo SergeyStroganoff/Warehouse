@@ -61,7 +61,7 @@ server.servlet.encoding.force=true
 ###email.settings
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
-spring.mail.username=your-email@example.com
-spring.mail.password=your-email-password
+spring.mail.username=***_your-email@example.com
+spring.mail.password=***_your-email-password
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true

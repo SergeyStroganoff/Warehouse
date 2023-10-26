@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface DataVerifier {
 
-    public static final String ARTICLE = "Article";
+     String ARTICLE = "Article";
 
     boolean dataVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException;
 
