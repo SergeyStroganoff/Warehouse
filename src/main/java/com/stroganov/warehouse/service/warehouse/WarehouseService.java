@@ -7,8 +7,6 @@ import java.util.Optional;
 
 public interface WarehouseService {
     List<Warehouse> getCurrentUserWarehouseList();
-
     Optional<Warehouse> getCurrentUserWarehouse();
-
     Optional<Warehouse> findById(int id);
 }

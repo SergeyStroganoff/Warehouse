@@ -14,10 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Integer> {
-    @Query("""
-            select s from Stock s
-            where s.item.model.article = ?1 and s.item.producer.name = ?2 and s.item.itemStyle.styleArticle = ?3""")
-    Optional<Stock> findByItem_Model_ArticleAndItem_Producer_NameAndItem_ItemStyle_StyleArticle(String article, String name, String styleArticle);
 
     @Query("""
             select s from Stock s
@@ -79,4 +75,12 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
             FROM Stock s where s.warehouse.id = ?1 GROUP BY s.item.producer.name, s.item.producer.description
             """)
     List<Tuple> getStatisticsByProducer(int warehouseId);
+
+    @Query("select s from Stock s where s.item.model.article like concat('%', ?1) and s.warehouse.id = ?2")
+    List<Stock> findByItem_Model_ArticleContainsAndWarehouse_Id(String article, int id);
+
+    @Query("""
+            select s from Stock s
+            where s.item.model.article like concat('%', ?1) and s.item.itemStyle.styleArticle like concat('%', ?2, "%") and s.warehouse.id = ?3""")
+    List<Stock> findByItem_Model_ArticleContainsAndItem_Model_ArticleContainsAndWarehouse_Id(String article, String article1, int id);
 }

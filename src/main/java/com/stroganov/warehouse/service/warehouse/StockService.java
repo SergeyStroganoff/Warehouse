@@ -26,4 +26,8 @@ public interface StockService {
     Page<Stock> getPageOfStockFilteredByManufactureIdAndByAmountLessAndWarehouseId(Integer producerId, Integer amountLess, int page, int size, int warehouseId);
 
     Page<Stock> getPageOfStockFilteredByAmountLessAndWarehouseId(Integer amountLess, int page, int size, int warehouseId);
+
+    List<Stock> findStockByModelArticleAndWarehouseId(String modelArticle, int warehouseId);
+
+    List<Stock> findStockByModelArticleAndStyleArticleAndWarehouseId(String modelArticle, String styleArticle, int warehouseId);
 }
