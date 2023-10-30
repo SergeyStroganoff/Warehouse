@@ -19,8 +19,7 @@
         <div class="col-md-5 shadow p-3 mb-5 bg-body rounded" style="background-color: #f9f9f9">
             <h4 class="mt-4 center">User Registration Form</h4>
             <div class="container mt-md-5">
-                <form class="row" th:action="@{/user-registration}" name="addUserForm" method="post"
-                      th:object="${userDTO}">
+                <form class="row" th:action="@{/user-registration}" name="addUserForm" method="post" th:object="${userDTO}">
                     <div class="col-md-5">
                         <label for="username" class="form-label">Username (login)</label>
                         <input type="text" class="form-control" id="username" th:field="${userDTO.userName}"

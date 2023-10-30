@@ -87,5 +87,15 @@ public class StockServiceImpl implements StockService {
     public Page<Stock> getPageOfStockFilteredByAmountLessAndWarehouseId(Integer amountLess, int page, int size, int warehouseId) {
         return stockRepository.findByWarehouse_IdAndAmountLessThan(warehouseId, amountLess, PageRequest.of(page, size));
     }
+
+    @Override
+    public List<Stock> findStockByModelArticleAndWarehouseId(String modelArticle, int warehouseId) {
+        return stockRepository.findByItem_Model_ArticleContainsAndWarehouse_Id(modelArticle, warehouseId);
+    }
+
+    @Override
+    public List<Stock> findStockByModelArticleAndStyleArticleAndWarehouseId(String modelArticle, String styleArticle, int warehouseId) {
+        return stockRepository.findByItem_Model_ArticleContainsAndItem_Model_ArticleContainsAndWarehouse_Id(modelArticle, styleArticle, warehouseId);
+    }
 }
 
