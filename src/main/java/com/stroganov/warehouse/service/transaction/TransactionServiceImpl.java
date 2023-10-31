@@ -96,7 +96,7 @@ public class TransactionServiceImpl implements TransactionService {
             Optional<Item> itemOptional = itemService.findItemByModelNameAndStyleArticle(
                     dto.getModelArticle(), dto.getManufactureName(), dto.getStyleArticle());
             Item item = itemOptional.orElseThrow(() -> {
-                String message = String.format("Item with parameters: %s  not found in catalog", dto);
+                String message = String.format("Transaction Error: Item with parameters: %s  not found in catalog", dto);
                 logger.error(message);
                 return new TransactionServiceException(message);
             });

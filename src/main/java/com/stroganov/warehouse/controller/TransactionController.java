@@ -70,25 +70,23 @@ public class TransactionController {
             fileUploadedPath = storageService.store(file);
             exelTransactionRowSet = parserManager.parseFile(fileUploadedPath, FileTypeOptions.valueOf(selectedOption));
             recordedRows = transactionService.doTransaction(exelTransactionRowSet, type);
-            storageService.delete(fileUploadedPath);
+            String message = String.format("You successfully uploaded %s file. %n Recorded: %d rows", file.getOriginalFilename(), recordedRows);
+            notification = new Notification("Success", message);
         } catch (StorageException e) {
             logger.error("Error during saving file: " + file.getOriginalFilename(), e);
             notification = new Notification("Error", SAVING_ERROR_MESSAGE + e.getMessage());
-            model.addAttribute(NOTIFICATION, notification);
-            return UPLOAD_DELIVERY_FORM_ADDRESS;
         } catch (FileParsingException e) {
             logger.debug("File parsing error: " + fileUploadedPath, e);
             notification = new Notification("Error", e.getMessage());
-            model.addAttribute(NOTIFICATION, notification);
-            return UPLOAD_DELIVERY_FORM_ADDRESS;
         } catch (TransactionServiceException e) {
             logger.debug("Transaction error: " + e.getMessage());
             notification = new Notification("Transaction unsuccessfully", e.getMessage() + " Fix list or add new Items in Warehouse");
-            model.addAttribute(NOTIFICATION, notification);
-            return UPLOAD_DELIVERY_FORM_ADDRESS;
         }
-        String message = String.format("You successfully uploaded %s file. %n Recorded: %d rows", file.getOriginalFilename(), recordedRows);
-        notification = new Notification("Success", message);
+        try {
+            storageService.delete(fileUploadedPath);
+        } catch (StorageException e) {
+            logger.error(e.getMessage());
+        }
         model.addAttribute(NOTIFICATION, notification);
         return UPLOAD_DELIVERY_FORM_ADDRESS;
     }

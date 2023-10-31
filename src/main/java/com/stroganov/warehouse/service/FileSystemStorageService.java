@@ -24,7 +24,6 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public Path store(MultipartFile multiPartFile) throws StorageException {
         Path destinationFilePath;
-
         if (multiPartFile == null || multiPartFile.isEmpty()) {
             throw new StorageException(FAILED_TO_STORE_EMPTY_FILE);
         }
