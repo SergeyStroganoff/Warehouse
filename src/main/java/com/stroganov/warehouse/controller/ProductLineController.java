@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +53,7 @@ public class ProductLineController {
     public DataParser<Item> itemDataParser;
 
     @GetMapping("/upload-product-line")
-    public String showRegisterForm(Model model) {
+    public String showRegisterForm() {
         return UPLOAD_FILE_FORM;
     }
 
@@ -66,23 +65,23 @@ public class ProductLineController {
         try {
             fileUploadedPath = storageService.store(file);
             itemSet = dataStorageHandler.parseExelFile(fileUploadedPath, itemDataParser, itemVerifierImpl);
-            storageService.delete(fileUploadedPath);
+            List<Item> savedItems = itemService.saveAllUnique(itemSet);
+            if (!savedItems.isEmpty()) {
+                stockService.stockInitialisation(savedItems, 0);
+            }
+            notification = new Notification("Success", String.format("You've uploaded: %s items from: %s", savedItems.size(), file.getOriginalFilename()));
         } catch (StorageException e) {
             logger.error("Error during saving file: " + file.getOriginalFilename(), e);
             notification = new Notification("Error", SAVING_ERROR_MESSAGE + e.getMessage());
-            model.addAttribute(NOTIFICATION, notification);
-            return UPLOAD_FILE_FORM;
         } catch (FileParsingException e) {
             logger.error("File parsing error: " + fileUploadedPath, e);
             notification = new Notification("Error", e.getMessage());
-            model.addAttribute(NOTIFICATION, notification);
-            return UPLOAD_FILE_FORM;
         }
-        List<Item> savedItems = itemService.saveAllUnique(itemSet);
-        if (!savedItems.isEmpty()) {
-            stockService.stockInitialisation(savedItems, 0);
+        try {
+            storageService.delete(fileUploadedPath);
+        } catch (StorageException e) {
+            logger.error(e.getMessage());
         }
-        notification = new Notification("Success", String.format("You've uploaded: %s items from: %s", savedItems.size(),file.getOriginalFilename()));
         model.addAttribute(NOTIFICATION, notification);
         return UPLOAD_FILE_FORM;
     }

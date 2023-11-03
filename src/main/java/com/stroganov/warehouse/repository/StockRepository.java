@@ -90,7 +90,7 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     List<Tuple> getStatisticsByProducer(int warehouseId);
 
     @Lock(LockModeType.PESSIMISTIC_READ)
-    @Query("select s from Stock s where s.item.model.article like concat('%', ?1) and s.warehouse.id = ?2")
+    @Query("select s from Stock s where s.item.model.article = ?1 and s.warehouse.id = ?2")
     List<Stock> findByItem_Model_ArticleContainsAndWarehouse_Id(String article, int id);
 
     @Query("""

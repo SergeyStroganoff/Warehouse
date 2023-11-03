@@ -25,7 +25,7 @@ dropArea.addEventListener('dragover', (e) => {
 dropArea.addEventListener('drop', (e) => {
     e.preventDefault();
     dropArea.classList.remove('hover');
-    const files = e.dataTransfer.files;
+    const files = e.dataTransfer.files.length ? e.dataTransfer.files : fileInput.files;
     handleFiles(files);
 });
 
