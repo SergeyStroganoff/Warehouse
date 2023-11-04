@@ -26,6 +26,7 @@ public class TransactionListVerifierImpl implements DataVerifier {
                 typeErrorHashMap.put(String.valueOf(r), DataVerificationTypeError.CELL_SIZE_ERROR);
             }
             if (!x.get(3).matches("\\d{1,7}")) {
+
                 typeErrorHashMap.put(String.valueOf(r), DataVerificationTypeError.CELL_FORMAT_ERROR);
             }
             return typeErrorHashMap;

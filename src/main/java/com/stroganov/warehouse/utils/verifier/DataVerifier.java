@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface DataVerifier {
 
-     String ARTICLE = "Article";
+    String ARTICLE = "Article";
 
     boolean dataVerify(Map<Integer, List<String>> exelRowMap) throws DataVerificationException;
 
@@ -30,7 +30,7 @@ public interface DataVerifier {
             if (ARTICLE.equalsIgnoreCase(firstCell)) {
                 continue;
             }
-            verificationErrors = rowChecker.checkRow(cellValueList,rowNumber);
+            verificationErrors.putAll(rowChecker.checkRow(cellValueList, rowNumber));
         }
         return DataVerifier.CheckParsingErrors(verificationErrors, logger);
     }

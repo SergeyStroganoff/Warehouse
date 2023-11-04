@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.stroganov.warehouse.controller.ProductLineController.NOTIFICATION;
@@ -82,10 +83,12 @@ public class TransactionController {
             logger.debug("Transaction error: " + e.getMessage());
             notification = new Notification("Transaction unsuccessfully", e.getMessage() + " Fix list or add new Items in Warehouse");
         }
-        try {
-            storageService.delete(fileUploadedPath);
-        } catch (StorageException e) {
-            logger.error(e.getMessage());
+        if (!Objects.isNull(fileUploadedPath)) {
+            try {
+                storageService.delete(fileUploadedPath);
+            } catch (StorageException e) {
+                logger.error(e.getMessage());
+            }
         }
         model.addAttribute(NOTIFICATION, notification);
         return UPLOAD_DELIVERY_FORM_ADDRESS;
